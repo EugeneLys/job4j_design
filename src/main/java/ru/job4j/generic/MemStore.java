@@ -19,11 +19,11 @@ public final class MemStore<T extends Base> implements Store<T> {
 
     @Override
     public boolean delete(String id) {
-        if (findById(id) == null) {
-            return false;
+        boolean rsl = findById(id) != null;
+        if (rsl) {
+            storage.remove(id);
         }
-        storage.remove(id);
-        return findById(id) == null;
+        return rsl;
     }
 
     @Override
