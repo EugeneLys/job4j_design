@@ -61,10 +61,18 @@ public class SimpleArrayList<T> implements SimpleList<T> {
 
             @Override
             public boolean hasNext() {
+                while (size < container.length && container[size] != null) {
+                    size++;
+                }
+                return size < container.length;
             }
 
             @Override
             public T next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
+                return container[size++];
             }
         };
     }
