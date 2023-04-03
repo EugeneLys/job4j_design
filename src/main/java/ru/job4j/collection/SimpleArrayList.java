@@ -10,7 +10,6 @@ public class SimpleArrayList<T> implements SimpleList<T> {
 
     public SimpleArrayList(int capacity) {
         container = (T[]) new Object[capacity];
-        size = 0;
     }
 
     @Override
@@ -25,9 +24,7 @@ public class SimpleArrayList<T> implements SimpleList<T> {
 
     @Override
     public T set(int index, T newValue) {
-        if (index < 0 || index > size - 1) {
-            throw new IndexOutOfBoundsException();
-        }
+        Objects.checkIndex(index, size);
         T result = get(index);
         container[index] = newValue;
         return result;
@@ -35,9 +32,7 @@ public class SimpleArrayList<T> implements SimpleList<T> {
 
     @Override
     public T remove(int index) {
-        if (index < 0 || index > size - 1) {
-            throw new IndexOutOfBoundsException();
-        }
+        Objects.checkIndex(index, size);
         T actual = get(index);
         System.arraycopy(container, index + 1, container, index, container.length - index - 1);
         container[container.length - 1] = null;
@@ -48,9 +43,7 @@ public class SimpleArrayList<T> implements SimpleList<T> {
 
     @Override
     public T get(int index) {
-        if (index < 0 || index > size - 1) {
-            throw new IndexOutOfBoundsException();
-        }
+        Objects.checkIndex(index, size);
         return container[index];
     }
 
@@ -62,9 +55,10 @@ public class SimpleArrayList<T> implements SimpleList<T> {
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {
-            private final T[] data = container;
+            private T[] data = container;
+            private int expectedModCount = modCount;
             private int point = 0;
-            final int expectedModCount = modCount;
+
             @Override
             public boolean hasNext() {
                 if (expectedModCount != modCount) {
@@ -75,9 +69,6 @@ public class SimpleArrayList<T> implements SimpleList<T> {
 
             @Override
             public T next() {
-                if (expectedModCount != modCount) {
-                    throw new ConcurrentModificationException();
-                }
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
