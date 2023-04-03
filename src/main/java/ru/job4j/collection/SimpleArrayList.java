@@ -1,9 +1,6 @@
 package ru.job4j.collection;
 
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
-import java.util.Objects;
+import java.util.*;
 
 public class SimpleArrayList<T> implements SimpleList<T> {
 
@@ -13,35 +10,47 @@ public class SimpleArrayList<T> implements SimpleList<T> {
 
     public SimpleArrayList(int capacity) {
         container = (T[]) new Object[capacity];
+        size = 0;
     }
 
     @Override
     public void add(T value) {
-        size++;
         if (size >= container.length) {
             grow();
         }
         container[size] = value;
+        size++;
         modCount++;
     }
 
     @Override
     public T set(int index, T newValue) {
+        if (index < 0 || index > size - 1) {
+            throw new IndexOutOfBoundsException();
+        }
         T result = get(index);
         container[index] = newValue;
-        modCount++;
         return result;
     }
 
     @Override
     public T remove(int index) {
+        if (index < 0 || index > size - 1) {
+            throw new IndexOutOfBoundsException();
+        }
+        T actual = get(index);
         System.arraycopy(container, index + 1, container, index, container.length - index - 1);
         container[container.length - 1] = null;
-        return container[index];
+        size--;
+        modCount++;
+        return actual;
     }
 
     @Override
     public T get(int index) {
+        if (index < 0 || index > size - 1) {
+            throw new IndexOutOfBoundsException();
+        }
         return container[index];
     }
 
@@ -53,21 +62,26 @@ public class SimpleArrayList<T> implements SimpleList<T> {
     @Override
     public Iterator<T> iterator() {
         return new Iterator<T>() {
-
+            private final T[] data = container;
+            private int point = 0;
+            final int expectedModCount = modCount;
             @Override
             public boolean hasNext() {
-                while (size < container.length && container[size] != null) {
-                    size++;
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
                 }
-                return size < container.length;
+                return point < size;
             }
 
             @Override
             public T next() {
+                if (expectedModCount != modCount) {
+                    throw new ConcurrentModificationException();
+                }
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                return container[size++];
+                return data[point++];
             }
         };
     }
