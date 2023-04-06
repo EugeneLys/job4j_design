@@ -16,7 +16,11 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
         if (size == 0) {
             head = new Node<>(value, null);
         } else {
-            head.next = new Node<E>(value, null);
+            Node<E> last = head.next;
+            while (last != null) {
+                last = last.next;
+            }
+            last = new Node<E>(value, null);
         }
         size++;
         modCount++;
