@@ -5,18 +5,16 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 
-public class SimpleLinkedList<E> implements LinkedList<E> {
-
+public class ForwardLinked<T> implements Iterable<T> {
     private int size = 0;
     private int modCount = 0;
-    private Node<E> head;
+    private Node<T> head;
 
-    @Override
-    public void add(E value) {
+    public void add(T value) {
         if (head == null) {
             head = new Node<>(value, null);
         } else {
-            Node<E> last = head;
+            Node<T> last = head;
             while (last.next != null) {
                 last = last.next;
             }
@@ -26,21 +24,29 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
         modCount++;
     }
 
-    @Override
-    public E get(int index) {
+    public T get(int index) {
         Objects.checkIndex(index, size);
-        Node<E> rsl = head;
+        Node<T> rsl = head;
         for (int i = 0; i < index; i++) {
             rsl = rsl.next;
         }
         return rsl.item;
     }
 
+    public T deleteFirst() {
+        if (head == null) {
+            throw  new NoSuchElementException();
+        }
+        T rsl = head.item;
+        head = head.next;
+        return rsl;
+    }
+
     @Override
-    public Iterator<E> iterator() {
-        return new Iterator<E>() {
+    public Iterator<T> iterator() {
+        return new Iterator<T>() {
             private int expectedModCount = modCount;
-            Node<E> actual = head;
+            Node<T> actual = head;
 
             @Override
             public boolean hasNext() {
@@ -51,22 +57,22 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
             }
 
             @Override
-            public E next() {
+            public T next() {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                E rsl = actual.item;
+                T next = actual.item;
                 actual = actual.next;
-                return rsl;
+                return next;
             }
         };
     }
 
-    private static class Node<E> {
-        private E item;
-        private Node<E> next;
+    private static class Node<T> {
+        private T item;
+        private Node<T> next;
 
-        Node(E element, Node<E> next) {
+        Node(T element, Node<T> next) {
             this.item = element;
             this.next = next;
         }
