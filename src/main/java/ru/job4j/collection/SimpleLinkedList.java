@@ -13,17 +13,29 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
 
     @Override
     public void add(E value) {
+        if (head == null) {
+            head = new Node<>(value, null);
+        } else {
+            Node<E> last = head;
+            while (last.next != null) {
+                last = last.next;
+            }
+            last.next = new Node<>(value, null);
+        }
+        size++;
+        modCount++;
     }
 
     @Override
     public E get(int index) {
         Objects.checkIndex(index, size);
-        int point = 0;
-        while (point < index) {
-            iterator().next();
-            point++;
+        int count = 0;
+        Node<E> rsl = head;
+        while (count < index) {
+            rsl = rsl.next;
+            count++;
         }
-        return iterator().next();
+        return rsl.item;
     }
 
     @Override
@@ -45,8 +57,8 @@ public class SimpleLinkedList<E> implements LinkedList<E> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                Node<E> node = head;
                 int count = 0;
+                Node<E> node = head;
                 while (count < point) {
                     node = node.next;
                     count++;
