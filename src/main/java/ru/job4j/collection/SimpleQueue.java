@@ -6,24 +6,24 @@ import java.util.Stack;
 public class SimpleQueue<T> {
     private final SimpleStack<T> in = new SimpleStack<>();
     private final SimpleStack<T> out = new SimpleStack<>();
-
     private int size;
-    private int start;
-    /* добавьте переменные, если они требуются */
 
     public T poll() {
-        if (start == size) {
+        if (size == 0) {
             throw new NoSuchElementException("Queue is empty");
         }
-        SimpleStack<T> change;
-        change = in;
-        for (int i = start; i < size; i++) {
-            out.push(change.pop());
+        for (int i = 0; i < size; i++) {
+            out.push(in.pop());
         }
         T rsl = out.pop();
-        start++;
+        size--;
+        for (int i = 0; i < size; i++) {
+            T var = out.pop();
+            if (var != null) {
+                in.push(var);
+            }
+        }
         return rsl;
-
     }
 
     public void push(T value) {
