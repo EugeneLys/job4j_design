@@ -21,10 +21,6 @@ public class SimpleQueue<T> {
             sizeIn = 0;
         }
         T rsl = out.pop();
-        while (rsl == null) {
-            rsl = out.pop();
-            sizeOut--;
-        }
         sizeOut--;
         return rsl;
     }
