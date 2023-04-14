@@ -1,5 +1,4 @@
 package ru.job4j.iterator;
-
 import java.util.*;
 import java.util.function.Predicate;
 
