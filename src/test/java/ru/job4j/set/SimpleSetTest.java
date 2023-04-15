@@ -37,4 +37,12 @@ class SimpleSetTest {
         assertThat(set.contains(null)).isTrue();
         assertThat(set.add(null)).isFalse();
     }
+
+    @Test
+    void whenDoNotContains() {
+        Set<Integer> set = new SimpleSet<>();
+        assertThat(set.add(1)).isTrue();
+        assertThat(set.contains(2)).isFalse();
+        assertThat(set.contains(1)).isTrue();
+    }
 }
