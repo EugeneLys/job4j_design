@@ -17,6 +17,9 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     @Override
     public boolean put(K key, V value) {
+        if (count > capacity * 3 / 4) {
+            expand();
+        }
         boolean rsl = false;
         int h = hash(Objects.hashCode(key));
         int index = indexFor(h);
@@ -39,13 +42,24 @@ public class SimpleMap<K, V> implements Map<K, V> {
     }
 
     private void expand() {
-        SimpleMap<K, V> map = new SimpleMap<>();
-        map.capacity = capacity * 2;
+        MapEntry<K, V>[] next = new MapEntry[capacity * 2];
+        for (MapEntry<K, V> me : table) {
+            next.put(me.key, me.value);
+        }
+        table = map;
     }
 
     @Override
     public V get(K key) {
-        return null;
+        V result = null;
+        for (MapEntry<K, V> me : table) {
+            if (me.key.equals(key)) {
+                result = me.value;
+                break;
+            }
+        }
+        return result;
+
     }
 
     @Override
