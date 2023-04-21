@@ -16,7 +16,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     @Override
     public boolean put(K key, V value) {
-        if (count > capacity * 3 / 4) {
+        if ((float) count / capacity >= LOAD_FACTOR) {
             expand();
         }
         boolean rsl = false;
@@ -41,34 +41,64 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     private void expand() {
         MapEntry<K, V>[] temp = Arrays.copyOf(table, table.length);
-        table = new MapEntry[capacity * 2];
+        capacity *= 2;
+        table = new MapEntry[capacity];
         count = 0;
         for (MapEntry<K, V> t : temp) {
-            int h = hash(Objects.hashCode(t.key));
-            int index = indexFor(h);
-            if (table[index] == null) {
-                table[index] = new MapEntry<K, V>(t.key, t.value);
-                count++;
+            if (t != null) {
+                int h = hash(Objects.hashCode(t.key));
+                int index = indexFor(h);
+                if (table[index] == null) {
+                    table[index] = t;
+                    count++;
+                }
             }
-            table[count] = new MapEntry<K, V>(t.key, t.value);
-            count++;
         }
     }
 
     @Override
     public V get(K key) {
-        int index = indexFor(hash(Objects.hashCode(key)));
-        return table[index] == null ? null : table[index].value;
-
+        V var = null;
+        for (int i = 0; i < table.length && table[i] != null; i++) {
+            if (table[i].key == null) {
+                var = key == null ? table[i].value : null;
+            } else if (table[i].key.hashCode() == key.hashCode() && table[i].key.equals(key)) {
+                var = table[i].value;
+                break;
+            }
+        }
+        /*if (key == null) {
+            var = table[0].key == null ? table[0].value : null;
+        } else {
+            for (int i = 0; i < table.length; i++) {
+                if (table[i] != null) {
+                    if (table[i].key == null) {
+                        var = null;
+                        break;
+                    }
+                    if (table[i].key.hashCode() == key.hashCode() && table[i].key.equals(key)) {
+                        var = table[i].value;
+                        break;
+                    }
+                }
+            }
+        }*/
+        return var;
     }
 
     @Override
     public boolean remove(K key) {
         boolean rsl = false;
-        if (get(key) != null) {
-            table[indexFor(hash(Objects.hashCode(key)))] = null;
-            count--;
-            rsl = true;
+        for (int i = 0; i < table.length; i++) {
+            if (table[i] != null) {
+                if (table[i].key == key) {
+                    table[i] = null;
+                    modCount++;
+                    count--;
+                    rsl = true;
+                    break;
+                }
+            }
         }
         return rsl;
     }
