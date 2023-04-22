@@ -32,7 +32,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
     }
 
     private int hash(int hashCode) {
-        return hashCode ^ (hashCode>>>8);
+        return hashCode ^ (hashCode >>> capacity);
     }
 
     private int indexFor(int hash) {
@@ -58,45 +58,42 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     @Override
     public V get(K key) {
-        V var = null;
-        for (int i = 0; i < table.length && table[i] != null; i++) {
-            if (table[i].key == null) {
-                var = key == null ? table[i].value : null;
-            } else if (table[i].key.hashCode() == key.hashCode() && table[i].key.equals(key)) {
-                var = table[i].value;
-                break;
+        V result = null;
+        if (key == null) {
+            if (table[0] != null) {
+                result = table[0].key == null ? table[0].value : null;
             }
-        }
-        /*if (key == null) {
-            var = table[0].key == null ? table[0].value : null;
         } else {
-            for (int i = 0; i < table.length; i++) {
-                if (table[i] != null) {
-                    if (table[i].key == null) {
-                        var = null;
-                        break;
-                    }
-                    if (table[i].key.hashCode() == key.hashCode() && table[i].key.equals(key)) {
-                        var = table[i].value;
-                        break;
-                    }
+            int index = indexFor(hash(key.hashCode()));
+            var entry = table[index];
+            if (entry != null && entry.key != null) {
+                if (entry.key.hashCode() == key.hashCode()) {
+                    result = entry.key.equals(key) ? entry.value : null;
                 }
             }
-        }*/
-        return var;
+        }
+        return result;
     }
 
     @Override
     public boolean remove(K key) {
         boolean rsl = false;
-        for (int i = 0; i < table.length; i++) {
-            if (table[i] != null) {
-                if (table[i].key == key) {
-                    table[i] = null;
-                    modCount++;
-                    count--;
-                    rsl = true;
-                    break;
+        if (key == null) {
+            if (table[0].key == null) {
+                table[0] = null;
+                count--;
+                rsl = true;
+            }
+        } else {
+            for (int i = 0; i < table.length; i++) {
+                if (table[i] != null && table[i].key != null) {
+                    if (table[i].key.hashCode() == key.hashCode() && table[i].key.equals(key)) {
+                        table[i] = null;
+                        modCount++;
+                        count--;
+                        rsl = true;
+                        break;
+                    }
                 }
             }
         }
