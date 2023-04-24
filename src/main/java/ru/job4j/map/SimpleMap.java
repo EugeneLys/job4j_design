@@ -31,11 +31,16 @@ public class SimpleMap<K, V> implements Map<K, V> {
     }
 
     private int hash(int hashCode) {
-        return hashCode ^ (hashCode >>> capacity);
+        return hashCode ^ (hashCode >>> 16);
     }
 
     private int indexFor(int hash) {
         return hash & capacity - 1;
+    }
+
+    private boolean equalityCheck(MapEntry<K, V> entry, K key) {
+        return entry != null && entry.key != null
+        && entry.key.hashCode() == key.hashCode() && entry.key.equals(key);
     }
 
     private void expand() {
@@ -63,14 +68,11 @@ public class SimpleMap<K, V> implements Map<K, V> {
                 result = table[0].key == null ? table[0].value : null;
             }
         } else {
-            int index = indexFor(hash(key.hashCode()));
-            var entry = table[index];
-            if (entry != null && entry.key != null) {
-                if (entry.key.hashCode() == key.hashCode()) {
-                    result = entry.key.equals(key) ? entry.value : null;
+            int i = indexFor(hash(key.hashCode()));
+            if (equalityCheck(table[i], key)) {
+                    result = table[i].key.equals(key) ? table[i].value : null;
                 }
             }
-        }
         return result;
     }
 
@@ -85,8 +87,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
             }
         } else {
             for (int i = 0; i < table.length; i++) {
-                if (table[i] != null && table[i].key != null) {
-                    if (table[i].key.hashCode() == key.hashCode() && table[i].key.equals(key)) {
+                if (equalityCheck(table[i], key)) {
                         table[i] = null;
                         modCount++;
                         count--;
@@ -95,7 +96,6 @@ public class SimpleMap<K, V> implements Map<K, V> {
                     }
                 }
             }
-        }
         return rsl;
     }
 
@@ -120,15 +120,11 @@ public class SimpleMap<K, V> implements Map<K, V> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                for (int i = start; i < table.length; i++) {
-                    if (table[i] != null) {
-                        rsl = table[i].key;
-                        start = i + 1;
-                        point++;
-                        break;
-                    }
+                while (table[start] == null && point < count) {
+                    start++;
                 }
-                return rsl;
+                point++;
+                return table[start++].key;
             }
         };
     }
