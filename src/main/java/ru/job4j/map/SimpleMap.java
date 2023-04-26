@@ -39,8 +39,15 @@ public class SimpleMap<K, V> implements Map<K, V> {
     }
 
     private boolean equalityCheck(MapEntry<K, V> entry, K key) {
-        return entry != null && entry.key != null
-        && entry.key.hashCode() == key.hashCode() && entry.key.equals(key);
+        boolean rsl;
+        if (key == null) {
+            entry = table[0];
+            rsl = entry != null && entry.key == null;
+        } else {
+            rsl = entry != null && entry.key != null
+                    && entry.key.hashCode() == key.hashCode() && entry.key.equals(key);
+        }
+        return rsl;
     }
 
     private void expand() {
@@ -52,10 +59,8 @@ public class SimpleMap<K, V> implements Map<K, V> {
             if (t != null) {
                 int h = hash(Objects.hashCode(t.key));
                 int index = indexFor(h);
-                if (table[index] == null) {
-                    table[index] = t;
-                    count++;
-                }
+                table[index] = t;
+                count++;
             }
         }
     }
@@ -63,39 +68,27 @@ public class SimpleMap<K, V> implements Map<K, V> {
     @Override
     public V get(K key) {
         V result = null;
-        if (key == null) {
-            if (table[0] != null) {
-                result = table[0].key == null ? table[0].value : null;
+        for (MapEntry<K, V> entry : table) {
+            if (equalityCheck(entry, key)) {
+                result = entry.value;
+                break;
             }
-        } else {
-            int i = indexFor(hash(key.hashCode()));
-            if (equalityCheck(table[i], key)) {
-                    result = table[i].key.equals(key) ? table[i].value : null;
-                }
-            }
+        }
         return result;
     }
 
     @Override
     public boolean remove(K key) {
         boolean rsl = false;
-        if (key == null) {
-            if (table[0].key == null) {
-                table[0] = null;
+        for (int i = 0; i < table.length; i++) {
+            if (equalityCheck(table[i], key)) {
+                table[i] = null;
+                modCount++;
                 count--;
                 rsl = true;
+                break;
             }
-        } else {
-            for (int i = 0; i < table.length; i++) {
-                if (equalityCheck(table[i], key)) {
-                        table[i] = null;
-                        modCount++;
-                        count--;
-                        rsl = true;
-                        break;
-                    }
-                }
-            }
+        }
         return rsl;
     }
 
@@ -103,7 +96,6 @@ public class SimpleMap<K, V> implements Map<K, V> {
     public Iterator<K> iterator() {
         return new Iterator<K>() {
             private int expectedModCount = modCount;
-            private int point;
             private int start;
 
             @Override
@@ -111,19 +103,17 @@ public class SimpleMap<K, V> implements Map<K, V> {
                 if (expectedModCount != modCount) {
                     throw new ConcurrentModificationException();
                 }
-                return point < count;
+                while (start < table.length - 1 && table[start] == null) {
+                    start++;
+                }
+                return start < table.length && table[start] != null;
             }
 
             @Override
             public K next() {
-                K rsl = null;
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                while (table[start] == null && point < count) {
-                    start++;
-                }
-                point++;
                 return table[start++].key;
             }
         };
