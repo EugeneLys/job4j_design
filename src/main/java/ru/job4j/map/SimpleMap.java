@@ -25,9 +25,9 @@ public class SimpleMap<K, V> implements Map<K, V> {
         return key == null ? 0 : indexFor(hash(key.hashCode()));
     }
 
-    private boolean check(K key) {
+    private boolean check(K key, int index) {
         boolean rsl;
-        MapEntry<K, V> entry = table[findIndex(key)];
+        MapEntry<K, V> entry = table[index];
         if (key == null) {
             rsl = Objects.nonNull(entry) && Objects.isNull(entry.key);
         } else {
@@ -71,14 +71,16 @@ public class SimpleMap<K, V> implements Map<K, V> {
 
     @Override
     public V get(K key) {
-        return check(key) ? table[findIndex(key)].value : null;
+        int index = findIndex(key);
+        return check(key, index) ? table[index].value : null;
     }
 
     @Override
     public boolean remove(K key) {
         boolean rsl = false;
-        if (check(key)) {
-            table[findIndex(key)] = null;
+        int index = findIndex(key);
+        if (check(key, index)) {
+            table[index] = null;
             modCount++;
             count--;
             rsl = true;
