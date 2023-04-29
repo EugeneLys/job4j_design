@@ -22,7 +22,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
     }
 
     private int findIndex(K key) {
-        return key == null ? 0 : indexFor(hash(key.hashCode()));
+        return indexFor(hash(Objects.hashCode(key)));
     }
 
     private boolean check(K key, int index) {
@@ -42,11 +42,9 @@ public class SimpleMap<K, V> implements Map<K, V> {
         capacity *= 2;
         table = new MapEntry[capacity];
         count = 0;
-        for (MapEntry<K, V> t : temp) {
+        for (var t : temp) {
             if (t != null) {
-                int h = hash(Objects.hashCode(t.key));
-                int index = indexFor(h);
-                table[index] = t;
+                table[findIndex(t.key)] = t;
                 count++;
             }
         }
