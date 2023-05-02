@@ -22,19 +22,12 @@ public class SimpleMap<K, V> implements Map<K, V> {
     }
 
     private int findIndex(K key) {
-        return indexFor(hash(Objects.hashCode(key)));
+        return key == null ? 0 : indexFor(hash(key.hashCode()));
     }
 
     private boolean check(K key, int index) {
-        boolean rsl;
-        MapEntry<K, V> entry = table[index];
-        if (key == null) {
-            rsl = Objects.nonNull(entry) && Objects.isNull(entry.key);
-        } else {
-            rsl = Objects.nonNull(entry) && Objects.nonNull(entry.key)
-                    && Objects.equals(entry.key.hashCode(), key.hashCode()) && Objects.equals(entry.key, key);
-        }
-        return rsl;
+        return table[index] != null && Objects.hashCode(table[index].key) == Objects.hashCode(key)
+                && Objects.equals(table[index].key, key);
     }
 
     private void expand() {
@@ -42,9 +35,10 @@ public class SimpleMap<K, V> implements Map<K, V> {
         capacity *= 2;
         table = new MapEntry[capacity];
         count = 0;
-        for (var t : temp) {
+        for (MapEntry<K, V> t : temp) {
             if (t != null) {
-                table[findIndex(t.key)] = t;
+                int index = findIndex(t.key);
+                table[index] = t;
                 count++;
             }
         }
@@ -56,8 +50,7 @@ public class SimpleMap<K, V> implements Map<K, V> {
             expand();
         }
         boolean rsl = false;
-        int h = hash(Objects.hashCode(key));
-        int index = indexFor(h);
+        int index = findIndex(key);
         if (table[index] == null) {
             table[index] = new MapEntry<K, V>(key, value);
             count++;
