@@ -1,18 +1,29 @@
 package ru.job4j.question;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Analyze {
 
     public static Info diff(Set<User> previous, Set<User> current) {
-        int addCount = 0;
         int changeCount = 0;
-        int delCount = 0;
+        int delCount = previous.size();
 
-        return new Info (addCount,changeCount,delCount);
+        Map<Integer, String> check = new HashMap<>();
+        for (User u : current) {
+            check.put(u.getId(), u.getName());
+        }
+
+        int addCount = check.size();
+
+        for (User u : previous) {
+            if (check.containsKey(u.getId())) {
+                if (!Objects.equals(check.get(u.getId()), u.getName())) {
+                    changeCount++;
+                }
+                delCount--;
+                addCount--;
+            }
+        }
+        return new Info(addCount, changeCount, delCount);
     }
-
 }
