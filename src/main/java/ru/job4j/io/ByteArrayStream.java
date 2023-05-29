@@ -11,7 +11,7 @@ public class ByteArrayStream {
         byte[] bytes = new byte[] {'J', 'a', 'v', 'a'};
         ByteArrayInputStream stream = new ByteArrayInputStream(bytes);
         int data;
-        while((data = stream.read()) != -1) {
+        while ((data = stream.read()) != -1) {
             System.out.print((char) data);
         }
         System.out.println();
@@ -19,7 +19,7 @@ public class ByteArrayStream {
         byte[] bytes1 = str.getBytes();
         ByteArrayInputStream byteStream2 = new ByteArrayInputStream(bytes1, 3, 4);
         int data1;
-        while((data1 = byteStream2.read()) != -1) {
+        while ((data1 = byteStream2.read()) != -1) {
             System.out.print((char) data1);
         }
         System.out.println();
