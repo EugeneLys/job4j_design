@@ -20,7 +20,7 @@ public class Config {
         String div = "=";
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
             reader.lines()
-                    .forEach(l -> values.put(l.substring(0, l.lastIndexOf(div)), l.substring(l.lastIndexOf(div) + 1)));
+                    .forEach(l -> values.put(l.substring(0, l.indexOf(div)), l.substring(l.indexOf(div) + 1)));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -28,7 +28,6 @@ public class Config {
 
     public String value(String key) {
         return values.get(key);
-        //throw new UnsupportedOperationException("Don't impl this method yet!");
     }
 
     @Override

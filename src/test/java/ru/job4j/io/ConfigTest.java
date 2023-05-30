@@ -18,6 +18,14 @@ class ConfigTest {
         String path = "./data/pair_with_comment.properties";
         Config config = new Config(path);
         config.load();
-        assertThat(config.value("hibernate.connection.url")).isEqualTo("jdbc:postgresql://127.0.0.1:5432/trackstudio");
+        assertThat(config.value("name")).isEqualTo("Petr Arsentev");
+    }
+
+    @Test
+    void whenMistakenPairs() {
+        String path = "./data/pair_with_mistakes.properties";
+        Config config = new Config(path);
+        config.load();
+        assertThat(config.value("name")).isEqualTo("Petr Arsentev=1");
     }
 }
