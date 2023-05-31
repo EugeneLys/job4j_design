@@ -23,10 +23,23 @@ class ConfigTest {
     }
 
     @Test
-    void whenMistakenPairs() throws IllegalArgumentException {
-        String path = "./data/pair_with_mistakes.properties";
+    void whenPairWithNoValue() throws IllegalArgumentException {
+        String path = "./data/pair_with_no_value.properties";
         Config config = new Config(path);
-        config.load();
-        Assertions.assertThrows(IllegalArgumentException.class, () -> config.value("null"));
+        Assertions.assertThrows(IllegalArgumentException.class, config::load);
+    }
+
+    @Test
+    void whenPairWithNoKey() throws IllegalArgumentException {
+        String path = "./data/pair_with_no_key.properties";
+        Config config = new Config(path);
+        Assertions.assertThrows(IllegalArgumentException.class, config::load);
+    }
+
+    @Test
+    void whenPairWithNoSymbol() throws IllegalArgumentException {
+        String path = "./data/pair_with_no_symbol.properties";
+        Config config = new Config(path);
+        Assertions.assertThrows(IllegalArgumentException.class, config::load);
     }
 }

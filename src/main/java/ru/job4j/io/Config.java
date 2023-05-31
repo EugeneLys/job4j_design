@@ -3,9 +3,9 @@ package ru.job4j.io;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.StringJoiner;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Config {
 
@@ -19,19 +19,22 @@ public class Config {
     public void load() {
         String div = "=";
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
-            reader.lines().filter(l -> l.contains(div))
-                    .forEach(l -> values.put(l.substring(0, l.indexOf(div)), l.substring(l.indexOf(div) + 1)));
+            List<String> list = reader.lines().toList();
+            for (String str : list) {
+                if (!str.startsWith("#") && !str.isEmpty()) {
+                    if (str.startsWith(div) || str.endsWith(div) || !str.contains(div)) {
+                        throw new IllegalArgumentException();
+                    }
+                    values.put(str.substring(0, str.indexOf(div)), str.substring(str.indexOf(div) + 1));
+                }
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public String value(String key) {
-        String rsl = values.get(key);
-        if (rsl == null || key == null) {
-            throw new IllegalArgumentException();
-        }
-        return rsl;
+        return values.get(key);
     }
 
     @Override
