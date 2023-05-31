@@ -19,7 +19,7 @@ public class Config {
     public void load() {
         String div = "=";
         try (BufferedReader reader = new BufferedReader(new FileReader(path))) {
-            reader.lines()
+            reader.lines().filter(l -> l.contains(div))
                     .forEach(l -> values.put(l.substring(0, l.indexOf(div)), l.substring(l.indexOf(div) + 1)));
         } catch (IOException e) {
             e.printStackTrace();
@@ -27,7 +27,11 @@ public class Config {
     }
 
     public String value(String key) {
-        return values.get(key);
+        String rsl = values.get(key);
+        if (rsl == null || key == null) {
+            throw new IllegalArgumentException();
+        }
+        return rsl;
     }
 
     @Override

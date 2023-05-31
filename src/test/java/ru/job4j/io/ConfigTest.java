@@ -1,5 +1,6 @@
 package ru.job4j.io;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.*;
 
@@ -22,10 +23,10 @@ class ConfigTest {
     }
 
     @Test
-    void whenMistakenPairs() {
+    void whenMistakenPairs() throws IllegalArgumentException {
         String path = "./data/pair_with_mistakes.properties";
         Config config = new Config(path);
         config.load();
-        assertThat(config.value("name")).isEqualTo("Petr Arsentev=1");
+        Assertions.assertThrows(IllegalArgumentException.class, () -> config.value("null"));
     }
 }
