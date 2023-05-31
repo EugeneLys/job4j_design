@@ -22,7 +22,7 @@ public class Config {
             List<String> list = reader.lines().toList();
             for (String str : list) {
                 if (!str.startsWith("#") && !str.isEmpty()) {
-                    if (str.startsWith(div) || str.endsWith(div) || !str.contains(div)) {
+                    if (str.startsWith(div) || str.indexOf(div) == str.length() - 1 || !str.contains(div)) {
                         throw new IllegalArgumentException();
                     }
                     values.put(str.substring(0, str.indexOf(div)), str.substring(str.indexOf(div) + 1));

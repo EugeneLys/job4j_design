@@ -42,4 +42,13 @@ class ConfigTest {
         Config config = new Config(path);
         Assertions.assertThrows(IllegalArgumentException.class, config::load);
     }
+
+    @Test
+    void whenPairWithTwoSymbols() {
+        String path = "./data/pair_with_two_symbols.properties";
+        Config config = new Config(path);
+        config.load();
+        assertThat(config.value("key")).isEqualTo("value=1");
+        assertThat(config.value("key2")).isEqualTo("value=");
+    }
 }
