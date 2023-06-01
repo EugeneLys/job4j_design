@@ -1,25 +1,25 @@
 package ru.job4j.io;
 
 import java.io.*;
-import java.util.List;
-import java.util.StringJoiner;
 
 public class Analysis {
     public void unavailable(String source, String target) {
-        StringJoiner out = new StringJoiner("");
         try (BufferedReader reader = new BufferedReader(new FileReader(source));
         BufferedWriter writer = new BufferedWriter(new FileWriter(target))) {
-            List<String> list = reader.lines().toList();
-            for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).startsWith("400") || list.get(i).startsWith("500")) {
-                   out.add(list.get(i).substring(4) + ";");
-                   while (list.get(i).startsWith("400") || list.get(i).startsWith("500")) {
-                       i++;
-                   }
-                   out.add(list.get(i).substring(4) + System.lineSeparator());
+            String str = reader.readLine();
+            while (str != null) {
+                if (str.startsWith("400") || str.startsWith("500")) {
+                    writer.write(str + ";", 4, str.length() - 4);
+                    writer.write(";");
+                    while (str.startsWith("400") || str.startsWith("500")) {
+                        str = reader.readLine();
+                    }
+                    writer.write(str, 4, str.length() - 4);
+                    writer.write(";");
+                    writer.newLine();
                 }
+                str = reader.readLine();
             }
-            writer.write(out.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
