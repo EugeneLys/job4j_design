@@ -7,22 +7,25 @@ public class Analysis {
         try (BufferedReader reader = new BufferedReader(new FileReader(source));
         BufferedWriter writer = new BufferedWriter(new FileWriter(target))) {
             StringBuilder builder = new StringBuilder();
-            String str = reader.readLine();
-            while (str != null) {
+            String str;
+            while (reader.ready()) {
+                str = reader.readLine();
                 if (str.startsWith("400") || str.startsWith("500")) {
                     builder.append(str, 4, str.length());
                     builder.append(";");
-                    /*writer.write(";");*/
                     while (str.startsWith("400") || str.startsWith("500")) {
-                        str = reader.readLine();
+                        if (reader.ready()) {
+                            str = reader.readLine();
+                        } else {
+                            break;
+                        }
                     }
-                    builder.append(str, 4, str.length());
-                    builder.append(";");
-                    builder.append("\n");
-                   /* writer.write(";");*/
-                    /*writer.newLine();*/
+                    if (str.startsWith("200") || str.startsWith("300")) {
+                        builder.append(str, 4, str.length());
+                        builder.append(";");
+                        builder.append("\n");
+                    }
                 }
-                str = reader.readLine();
             }
             writer.write(builder.toString());
         } catch (IOException e) {
