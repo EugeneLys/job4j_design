@@ -11,11 +11,12 @@ public class Analysis {
                 str = reader.readLine();
                 if (str.startsWith("400") || str.startsWith("500")) {
                     writer.append(str, 4, str.length()).append(";");
-                    while (str.startsWith("400") || str.startsWith("500") && reader.ready()) {
+                    while (reader.ready()) {
                         str = reader.readLine();
-                    }
-                    if (str.startsWith("200") || str.startsWith("300")) {
-                        writer.append(str, 4, str.length()).append(";").append(System.lineSeparator());
+                        if (str.startsWith("200") || str.startsWith("300")) {
+                            writer.append(str, 4, str.length()).append(";").append(System.lineSeparator());
+                            break;
+                        }
                     }
                 }
             }
