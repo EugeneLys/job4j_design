@@ -10,11 +10,10 @@ import java.util.function.Predicate;
 
 public class Search {
     public static void main(String[] args) throws IOException {
-        if (!check(args)) {
-            throw new IllegalArgumentException();
+        if (check(args)) {
+            Path start = Paths.get(args[0]);
+            search(start, p -> p.toFile().getName().endsWith(args[1])).forEach(System.out::println);
         }
-        Path start = Paths.get(args[0]);
-        search(start, p -> p.toFile().getName().endsWith(args[1])).forEach(System.out::println);
     }
 
     public static List<Path> search(Path root, Predicate<Path> condition) throws IOException {
@@ -23,18 +22,17 @@ public class Search {
         return searcher.getPaths();
     }
 
-    public static boolean check(String[] args) {
+    public static boolean check(String[] args) throws IllegalArgumentException {
         boolean rsl = true;
-        File file = new File(args[0]);
         if (args.length != 2) {
-            rsl = false;
-            System.out.println("Requires 2 arguments");
-        } else if (!file.isDirectory()) {
-            rsl = false;
-            System.out.println("Bad root argument, no such directory");
-        } else if (!args[1].equals(".js")) {
-            rsl = false;
-            System.out.println("Bad file extension argument");
+            throw new IllegalArgumentException("This program requires 2 arguments to execute");
+        }
+        File file = new File(args[0]);
+        if (!file.isDirectory()) {
+            throw new IllegalArgumentException("Bad root argument, no such directory was found");
+        }
+        if (!(args[1].startsWith(".") && args[1].length() > 1)) {
+            throw new IllegalArgumentException("Wrong file extension writing");
         }
         return rsl;
     }
