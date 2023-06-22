@@ -10,10 +10,9 @@ import java.util.function.Predicate;
 
 public class Search {
     public static void main(String[] args) throws IOException {
-        if (check(args)) {
-            Path start = Paths.get(args[0]);
-            search(start, p -> p.toFile().getName().endsWith(args[1])).forEach(System.out::println);
-        }
+        check(args);
+        Path start = Paths.get(args[0]);
+        search(start, p -> p.toFile().getName().endsWith(args[1])).forEach(System.out::println);
     }
 
     public static List<Path> search(Path root, Predicate<Path> condition) throws IOException {
@@ -22,8 +21,7 @@ public class Search {
         return searcher.getPaths();
     }
 
-    public static boolean check(String[] args) throws IllegalArgumentException {
-        boolean rsl = true;
+    public static void check(String[] args) {
         if (args.length != 2) {
             throw new IllegalArgumentException("This program requires 2 arguments to execute");
         }
@@ -34,6 +32,5 @@ public class Search {
         if (!(args[1].startsWith(".") && args[1].length() > 1)) {
             throw new IllegalArgumentException("Wrong file extension writing");
         }
-        return rsl;
     }
 }
