@@ -8,6 +8,9 @@ public class ArgsName {
     private final Map<String, String> values = new HashMap<>();
 
     public String get(String key) {
+        if (!values.containsKey(key)) {
+            throw new IllegalArgumentException("This key: '" + key + "' is missing");
+        }
         return values.get(key);
     }
 
@@ -15,8 +18,23 @@ public class ArgsName {
         String reg = "=";
         for (String arg : args) {
             int index = arg.indexOf('=');
-            values.put(arg.substring(1, index),
-            arg.substring(index + 1, arg.length() - 1));
+            values.put(arg.substring(1, index), arg.substring(index + 1));
+        }
+    }
+
+    private static void check(String str) {
+        String prefix = "Error: This argument '" + str;
+        if (!str.contains("=")) {
+            throw new IllegalArgumentException(prefix + "' does not contain an equal sign");
+        }
+        if (!str.startsWith("-")) {
+            throw new IllegalArgumentException(prefix + "' does not start with a '-' character");
+        }
+        if (str.startsWith("-=")) {
+            throw new IllegalArgumentException(prefix + "' does not contain a key");
+        }
+        if (str.indexOf("=") == str.length() - 1) {
+            throw new IllegalArgumentException(prefix + "' does not contain a value");
         }
     }
 
@@ -25,9 +43,7 @@ public class ArgsName {
             throw new IllegalArgumentException("Arguments not passed to program");
         }
         for (String arg : args) {
-            if (!arg.contains("=")) {
-                throw new IllegalArgumentException("Error: This argument " + arg + " does not contain an equal sign");
-            }
+           check(arg);
         }
         ArgsName names = new ArgsName();
         names.parse(args);
