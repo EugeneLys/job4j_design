@@ -21,7 +21,7 @@ public class ConsoleChat {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
             List<String> list = readPhrases();
             List<String> log = new ArrayList<>();
-            System.out.println("Введите первое сообщение: ");
+            System.out.println("Введите сообщение: ");
             String str = br.readLine();
             log.add(str);
             while (str != null) {
