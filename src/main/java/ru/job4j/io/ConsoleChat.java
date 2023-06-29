@@ -4,10 +4,6 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 public class ConsoleChat {
     private static final String OUT = "закончить";
@@ -26,11 +22,15 @@ public class ConsoleChat {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
             List<String> list = readPhrases();
             List<String> log = new ArrayList<>();
-            System.out.println("Введите сообщение: ");
+            System.out.println("Введите первое сообщение: ");
             String str = br.readLine();
             log.add(str);
-            while (!str.equals(OUT)) {
-                if (str.equals(STOP)) {
+            while (str != null) {
+                if (str.equals(OUT)) {
+                    System.out.println("Программа закрыта.");
+                    saveLog(log);
+                    break;
+                } else if (str.equals(STOP)) {
                     while (!str.equals(CONTINUE)) {
                         str = br.readLine();
                         log.add(str);
@@ -43,9 +43,6 @@ public class ConsoleChat {
                     log.add(str);
                 }
             }
-            br.close();
-            System.out.println("Program execution finished");
-            saveLog(log);
         } catch (IOException e) {
             e.printStackTrace();
         }
