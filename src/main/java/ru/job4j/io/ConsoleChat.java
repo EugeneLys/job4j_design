@@ -26,12 +26,12 @@ public class ConsoleChat {
             String str = br.readLine();
             log.add(str);
             while (str != null) {
-                if (str.equals(OUT)) {
+                if (OUT.equals(str)) {
                     System.out.println("Программа закрыта.");
                     saveLog(log);
                     break;
-                } else if (str.equals(STOP)) {
-                    while (!str.equals(CONTINUE)) {
+                } else if (STOP.equals(str)) {
+                    while (!CONTINUE.equals(str)) {
                         str = br.readLine();
                         log.add(str);
                     }
