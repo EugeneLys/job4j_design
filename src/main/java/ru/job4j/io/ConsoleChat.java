@@ -11,7 +11,6 @@ public class ConsoleChat {
     private static final String CONTINUE = "продолжить";
     private final String path;
     private final String botAnswers;
-    private List<String> log;
 
     public ConsoleChat(String path, String botAnswers) {
         this.path = path;
