@@ -11,7 +11,6 @@ public class ConsoleChat {
     private static final String CONTINUE = "продолжить";
     private final String path;
     private final String botAnswers;
-    private List<String> log;
 
     public ConsoleChat(String path, String botAnswers) {
         this.path = path;
@@ -22,16 +21,16 @@ public class ConsoleChat {
         try (BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
             List<String> list = readPhrases();
             List<String> log = new ArrayList<>();
-            System.out.println("Введите первое сообщение: ");
+            System.out.println("Введите сообщение: ");
             String str = br.readLine();
             log.add(str);
             while (str != null) {
-                if (str.equals(OUT)) {
+                if (OUT.equals(str)) {
                     System.out.println("Программа закрыта.");
                     saveLog(log);
                     break;
-                } else if (str.equals(STOP)) {
-                    while (!str.equals(CONTINUE)) {
+                } else if (STOP.equals(str)) {
+                    while (!CONTINUE.equals(str)) {
                         str = br.readLine();
                         log.add(str);
                     }
