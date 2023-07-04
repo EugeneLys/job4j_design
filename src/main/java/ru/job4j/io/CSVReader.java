@@ -1,9 +1,8 @@
 package ru.job4j.io;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.PrintStream;
+import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -11,31 +10,36 @@ import java.util.StringJoiner;
 
 public class CSVReader {
     public static void handle(ArgsName argsName) throws Exception {
-        StringJoiner stringJoiner = new StringJoiner(",");
-        Scanner scanner = new Scanner(argsName.get("path"));
-        String[] filters = argsName.get("filter").split(";");
-        String[] words = scanner.nextLine().split(",");
+        Path path = Paths.get(argsName.get("path"));
+        Scanner scanner = new Scanner(path);
+        String[] filters = argsName.get("filter").split(",");
+        String[] words = scanner.nextLine().split(argsName.get("delimiter"));
         List<Integer> indexes = new ArrayList<>();
         for (String filter : filters) {
-            for (int j = 0; j < words.length; j++) {
-                if (filter.equals(words[j])) {
-                    indexes.add(j);
+            for (int index = 0; index < words.length; index++) {
+                if (filter.equals(words[index])) {
+                    indexes.add(index);
                 }
             }
         }
-        String[] result;
-        System.out.println();
-        while (scanner.hasNextLine()) {
-            words = scanner.nextLine().split(";");
-            for (int i : indexes) {
-                stringJoiner.add(words[i]);
+        while (words != null) {
+            StringJoiner stringJoiner = new StringJoiner(";");
+            for (int index : indexes) {
+                stringJoiner.add(words[index]);
             }
             System.out.println(stringJoiner);
+            words = scanner.hasNextLine() ? scanner.nextLine().split(";") : null;
         }
     }
 
     public static void main(String[] args) throws Exception {
-        /* здесь добавьте валидацию принятых параметров*/
+        if (args.length != 4) {
+            throw new IllegalArgumentException("This program requires 4 arguments to execute");
+        }
+        File file = new File(args[0].substring(args[0].indexOf("=") + 1));
+        if (!file.exists()) {
+            throw new IllegalArgumentException("Bad root argument, no such directory was found");
+        }
         ArgsName argsName = ArgsName.of(args);
         handle(argsName);
     }
