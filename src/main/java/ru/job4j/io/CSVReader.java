@@ -9,6 +9,7 @@ import java.util.Scanner;
 import java.util.StringJoiner;
 
 public class CSVReader {
+
     public static void handle(ArgsName argsName) throws Exception {
         Path path = Paths.get(argsName.get("path"));
         Scanner scanner = new Scanner(path);
