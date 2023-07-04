@@ -12,10 +12,11 @@ public class CSVReader {
 
     public static void handle(ArgsName argsName) throws Exception {
         Path path = Paths.get(argsName.get("path"));
-        try (Scanner scanner = new Scanner(path)) {
+        try (Scanner scan = new Scanner(path); PrintWriter pw = new PrintWriter(new FileWriter(argsName.get("out")))) {
             String[] filters = argsName.get("filter").split(",");
-            String[] words = scanner.nextLine().split(argsName.get("delimiter"));
+            String[] words = scan.nextLine().split(argsName.get("delimiter"));
             List<Integer> indexes = new ArrayList<>();
+            boolean check = "stdout".equals(argsName.get("out"));
             for (String filter : filters) {
                 for (int index = 0; index < words.length; index++) {
                     if (filter.equals(words[index])) {
@@ -28,8 +29,13 @@ public class CSVReader {
                 for (int index : indexes) {
                     stringJoiner.add(words[index]);
                 }
-                System.out.println(stringJoiner);
-                words = scanner.hasNextLine() ? scanner.nextLine().split(";") : null;
+                stringJoiner.add(System.lineSeparator());
+                if (check) {
+                    System.out.print(stringJoiner);
+                } else {
+                    pw.write(stringJoiner.toString());
+                }
+                words = scan.hasNextLine() ? scan.nextLine().split(";") : null;
             }
         } catch (IOException e) {
             e.printStackTrace();
