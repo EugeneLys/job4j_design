@@ -16,9 +16,10 @@ public class UsageLog4j {
         float size = 50.0F;
         byte course = 1;
         boolean student = true;
+        short exercises = 30000;
 
         LOG.debug("User info name : {}, age : {}, gender : {}, weight : {},"
-                + " height : {}, size {}, course : {}, student : {}",
-                name, age, gender, weight, height, size, course, student);
+                + " height : {}, size {}, course : {}, student : {}, exercises : {}",
+                name, age, gender, weight, height, size, course, student, exercises);
     }
 }
