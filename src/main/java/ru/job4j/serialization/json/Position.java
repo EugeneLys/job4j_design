@@ -22,7 +22,7 @@ public class Position {
     @Override
     public String toString() {
         return "Position{"
-                + "name='" + title + '\''
+                + "title='" + title + '\''
                 + ", grade=" + grade
                 + ", person=" + person
                 + ", occupied=" + occupied
