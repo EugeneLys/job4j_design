@@ -19,6 +19,26 @@ public class Position {
         this.requirements = requirements;
     }
 
+    public String getTitle() {
+        return title;
+    }
+
+    public int getGrade() {
+        return grade;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public boolean isOccupied() {
+        return occupied;
+    }
+
+    public String[] getRequirements() {
+        return requirements;
+    }
+
     @Override
     public String toString() {
         return "Position{"

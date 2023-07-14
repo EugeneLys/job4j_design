@@ -1,31 +1,32 @@
 package ru.job4j.serialization.json;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import org.json.JSONObject;
 
 public class Main {
     public static void main(String[] args) {
-        final Person person = new Person("Ivan", false, 30, new Contact("11-111"),
-                new String[] {"Worker", "Married"});
+        final Contact contact = new Contact("33-333");
+        final Contact contact2 = new Contact("22-222");
+        final Person person = new Person("Ivan", false, 30, contact, new String[] {"Worker", "Married"});
+        final Person person2 = new Person("Mary", true, 25, contact2, new String[] {"Manager", "Single"});
+        final Position position = new Position("Director", 10, person, true,
+                new String[] {"Experienced", "MBA", "Smart and clever"});
 
-        /* Преобразуем объект person в json-строку. */
-        final Gson gson = new GsonBuilder().create();
-        System.out.println(gson.toJson(person));
+        JSONObject contactJO = new JSONObject();
+        contactJO.put("phone", contact.getPhone());
 
-        /* Создаём новую json-строку с модифицированными данными*/
-        final String personJson =
-                "{"
-                        + "\"sex\":false,"
-                        + "\"age\":35,"
-                        + "\"contact\":"
-                        + "{"
-                        + "\"phone\":\"+7(924)111-111-11-11\""
-                        + "},"
-                        + "\"statuses\":"
-                        + "[\"Student\",\"Free\"]"
-                        + "}";
-        /* Превращаем json-строку обратно в объект */
-        final Person personMod = gson.fromJson(personJson, Person.class);
-        System.out.println(personMod);
+        JSONObject personJO = new JSONObject();
+        personJO.put("name", person.getName());
+        personJO.put("sex", person.isSex());
+        personJO.put("age", person.getAge());
+        personJO.put("contact", person.getContact());
+        personJO.put("statuses", person.getStatuses());
+
+        JSONObject positionJO = new JSONObject(position);
+
+        String ln = System.lineSeparator();
+        System.out.println("contact: " + ln + contactJO);
+        System.out.println("person: " + ln + personJO);
+        System.out.println("position: " + ln + positionJO);
+        System.out.println("person2: " + ln + new JSONObject(person2));
     }
 }
