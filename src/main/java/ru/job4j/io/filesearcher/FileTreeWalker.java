@@ -1,4 +1,4 @@
-package ru.job4j.io.fileSearcher;
+package ru.job4j.io.filesearcher;
 
 import java.io.IOException;
 import java.nio.file.FileVisitResult;
@@ -8,6 +8,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
+
 
 public class FileTreeWalker implements FileVisitor<Path> {
 

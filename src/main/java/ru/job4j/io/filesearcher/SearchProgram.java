@@ -1,12 +1,7 @@
-package ru.job4j.io.fileSearcher;
+package ru.job4j.io.filesearcher;
 
-import ru.job4j.io.ArgsName;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.*;
+import java.nio.file.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class SearchProgram {
 
-    private static final Map<String, String> values = new HashMap<>();
+    private static Map<String, String> values = new HashMap<>();
     private static Predicate<Path> predicate = null;
 
     public static void main(String[] args) throws IOException {
@@ -23,7 +18,13 @@ public class SearchProgram {
         checkParameters(args);
         Path start = Paths.get(values.get("d"));
         getPredicate(values.get("t"));
-        search(start, predicate).forEach(System.out::println);
+        try (FileWriter fw = new FileWriter(values.get("o"))) {
+            for (Path p : search(start, predicate)) {
+                fw.write(p.toString() + System.lineSeparator());
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void parse(String[] args) {
@@ -71,12 +72,35 @@ public class SearchProgram {
         if ("name".equals(arg)) {
             predicate = p -> p.toFile().getName().equals(values.get("n"));
         } else if ("regex".equals(arg)) {
-            Pattern pattern = Pattern.compile(arg);
+            Pattern pattern = Pattern.compile(values.get("n"));
             predicate = p -> pattern.matcher(p.toString()).find();
         } else if ("mask".equals(arg)) {
-
+            String str = transferToRegex(values.get("n"));
+            Pattern pattern = Pattern.compile(str);
+            predicate = p -> pattern.matcher(p.toString()).find();
         } else {
-            throw new IllegalArgumentException("Bad predicate");
+            throw new IllegalArgumentException("Bad search type parameter");
         }
+    }
+
+    public static String transferToRegex(String mask) {
+        int i = 0;
+        StringBuilder regex = new StringBuilder();
+        while (i < mask.length()) {
+            String str = mask.substring(i, i+1);
+            if ("*".equals(str)) {
+                regex.append("[.]+");
+            } else if ("?".equals(str)) {
+                regex.append("[.]{1}");
+            } else if (".".equals(str)) {
+                regex.append("[" + "\\\\." + "]");
+            } else {
+                regex.append("[").append(str);
+            }
+            i++;
+        }
+        String rsl = regex.toString();
+        System.out.println(rsl);
+        return rsl;
     }
 }
