@@ -59,7 +59,8 @@ public class SearchProgram {
 
     public static void checkParameters(String[] args) {
         if (args.length < 4) {
-            throw new IllegalArgumentException("4 args required");
+            throw new IllegalArgumentException("4 args required: -d=(dir), -n=(name, regex or mask), "
+                    + "-t=(search type paremeter), -o=(filename to write");
         }
         File file = new File(values.get("d"));
         if (!file.isDirectory()) {
@@ -77,7 +78,7 @@ public class SearchProgram {
             Pattern pattern = Pattern.compile(transferToRegex(values.get("n")));
             predicate = p -> pattern.matcher(p.toString()).find();
         } else {
-            throw new IllegalArgumentException("Bad search type parameter");
+            throw new IllegalArgumentException("Bad search parameter: it should be like any of: -n=mask, -n=regex, -n=name");
         }
     }
 
