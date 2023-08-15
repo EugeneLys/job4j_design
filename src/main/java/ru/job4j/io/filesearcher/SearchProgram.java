@@ -28,7 +28,6 @@ public class SearchProgram {
     }
 
     private static void parse(String[] args) {
-        String reg = "=";
         for (String arg : args) {
             checkArg(arg);
             int index = arg.indexOf('=');
@@ -36,7 +35,13 @@ public class SearchProgram {
         }
     }
 
-    private static void checkArg(String str) {
+    public static List<Path> search(Path root, Predicate<Path> predicate) throws IOException {
+        FileTreeWalker walker = new FileTreeWalker(predicate);
+        Files.walkFileTree(root, walker);
+        return walker.getFilesList();
+    }
+
+    public static void checkArg(String str) {
         String prefix = "Error: This argument '" + str;
         if (!str.contains("=")) {
             throw new IllegalArgumentException(prefix + "' does not contain an equal sign");
@@ -52,13 +57,7 @@ public class SearchProgram {
         }
     }
 
-    public static List<Path> search(Path root, Predicate<Path> predicate) throws IOException {
-        FileTreeWalker walker = new FileTreeWalker(predicate);
-        Files.walkFileTree(root, walker);
-        return walker.getFilesList();
-    }
-
-    private static void checkParameters(String[] args) {
+    public static void checkParameters(String[] args) {
         if (args.length < 4) {
             throw new IllegalArgumentException("4 args required");
         }
@@ -75,8 +74,7 @@ public class SearchProgram {
             Pattern pattern = Pattern.compile(values.get("n"));
             predicate = p -> pattern.matcher(p.toString()).find();
         } else if ("mask".equals(arg)) {
-            String str = transferToRegex(values.get("n"));
-            Pattern pattern = Pattern.compile(str);
+            Pattern pattern = Pattern.compile(transferToRegex(values.get("n")));
             predicate = p -> pattern.matcher(p.toString()).find();
         } else {
             throw new IllegalArgumentException("Bad search type parameter");
@@ -87,20 +85,15 @@ public class SearchProgram {
         int i = 0;
         StringBuilder regex = new StringBuilder();
         while (i < mask.length()) {
-            String str = mask.substring(i, i+1);
-            if ("*".equals(str)) {
-                regex.append("[.]+");
-            } else if ("?".equals(str)) {
-                regex.append("[.]{1}");
-            } else if (".".equals(str)) {
-                regex.append("[" + "\\\\." + "]");
-            } else {
-                regex.append("[").append(str);
+            String str = mask.substring(i, i + 1);
+            switch (str) {
+                case "*" -> regex.append(".+");
+                case "?" -> regex.append("[.]{1}");
+                case "." -> regex.append("[\\\\.]");
+                default -> regex.append("[").append(str).append("]").append("{1}");
             }
             i++;
         }
-        String rsl = regex.toString();
-        System.out.println(rsl);
-        return rsl;
+        return regex.toString();
     }
 }
