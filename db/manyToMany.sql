@@ -1,3 +1,4 @@
+
 create table banks(
     id serial primary key,
     name varchar(255)

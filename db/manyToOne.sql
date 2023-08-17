@@ -1,3 +1,4 @@
+
 create table brand(
     id serial primary key,
     name varchar(255)
