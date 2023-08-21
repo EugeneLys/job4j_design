@@ -1,9 +1,9 @@
-insert into users(name) values ('Ivan');
-insert into roles(name, users_id) values ('role one', 1);
-insert into items(name, users_id) values ('first item', 1);
+insert into roles(name) values ('role one');
 insert into rules(name) values ('rule one');
-insert into rules_roles(rules_id, roles_id) values (1, 1);
-insert into categories(name, items_id) values ('category one', 1);
-insert into comments(name, items_id) values ('comment one', 1);
-insert into attachs(name, items_id) values ('first attach', 1);
-insert into states(name, items_id) values ('attach one', 1);
+insert into categories(name) values ('category one');
+insert into states(name) values ('state one');
+insert into users(name, roles_id) values ('Ivan', 5);
+insert into items(name, users_id, categories_id, states_id) values ('first item', 6, 5, 5);
+insert into rules_roles(rules_id, roles_id) values (5, 5);
+insert into comments(name, items_id) values ('comment one', 2);
+insert into attachs(name, items_id) values ('attach one',  2);
