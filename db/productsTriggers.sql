@@ -68,16 +68,14 @@ create or replace function bef_impost()
 	returns trigger as
 $$
 	BEGIN
-		update products
-		set price = price + price*0.2
-		where id = new.id;
+		new.price = new.price + new.price*0.2;
 		return NEW;
 	END;
 $$
 LANGUAGE 'plpgsql';
 
 create trigger bef_impost_trigger
-    before insert 
+    before insert
 	on products
     for each row
     execute procedure bef_impost();
