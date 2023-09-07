@@ -1,0 +1,12 @@
+begin;
+declare c scroll cursor for select * from products;
+fetch last from c;
+move backward 6 from c;
+fetch next from c;
+move backward 9 from c;
+fetch next from c;
+move backward 6 from c;
+fetch next from c;
+fetch first from c;
+close c;
+commit;
