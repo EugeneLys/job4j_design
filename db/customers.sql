@@ -23,6 +23,6 @@ CREATE TABLE orders(
 );
 
 insert into orders values
-(1, 10, 1), (2, 20, 2), (3, 30, 3), (4, 0, 4);
+(1, 10, 1), (2, 20, 2), (3, 30, 3);
 
-select * from customers where id NOT IN (select customer_id from orders where amount > 0);
+select * from customers where id NOT IN (select customer_id from orders);
