@@ -1,10 +1,10 @@
 package ru.job4j.jdbc;
 
-import ru.job4j.io.Config;
-
-import java.io.IOException;
 import java.io.InputStream;
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 import java.util.StringJoiner;
 
@@ -14,12 +14,12 @@ public class TableEditor implements AutoCloseable {
 
     private Properties properties;
 
-    public TableEditor(Properties properties) throws ClassNotFoundException, SQLException {
+    public TableEditor(Properties properties) throws SQLException {
         this.properties = properties;
         initConnection();
     }
 
-    private void initConnection() throws ClassNotFoundException, SQLException {
+    private void initConnection() throws SQLException {
         String url = properties.getProperty("hibernate.connection.url");
         String login = properties.getProperty("hibernate.connection.username");
         String password = properties.getProperty("hibernate.connection.password");
@@ -27,37 +27,23 @@ public class TableEditor implements AutoCloseable {
     }
 
     public void createTable(String tableName) throws SQLException {
-        try (Statement statement = connection.createStatement()) {
-            String sql = String.format("CREATE TABLE IF NOT EXISTS %s()", tableName);
-            statement.execute(sql);
-        }
+        createStatement(String.format("CREATE TABLE IF NOT EXISTS %s()", tableName));
     }
 
     public void dropTable(String tableName) throws SQLException {
-        try (Statement statement = connection.createStatement()) {
-            String sql = String.format("DROP TABLE %s", tableName);
-            statement.execute(sql);
-        }}
+        createStatement(String.format("DROP TABLE %s", tableName));
+    }
 
     public void addColumn(String tableName, String columnName, String type) throws SQLException {
-        try (Statement statement = connection.createStatement()) {
-            String sql = String.format("ALTER TABLE %s ADD %s %s", tableName, columnName, type);
-            statement.execute(sql);
-        }
+        createStatement(String.format("ALTER TABLE %s ADD %s %s", tableName, columnName, type));
     }
 
     public void dropColumn(String tableName, String columnName) throws SQLException {
-        try (Statement statement = connection.createStatement()) {
-            String sql = String.format("ALTER TABLE %s DROP COLUMN %s", tableName, columnName);
-            statement.execute(sql);
-        }
+        createStatement(String.format("ALTER TABLE %s DROP COLUMN %s", tableName, columnName));
     }
 
     public void renameColumn(String tableName, String columnName, String newColumnName) throws SQLException {
-        try (Statement statement = connection.createStatement()) {
-            String sql = String.format("ALTER TABLE %s RENAME COLUMN %s TO %s", tableName, columnName, newColumnName);
-            statement.execute(sql);
-        }
+        createStatement(String.format("ALTER TABLE %s RENAME COLUMN %s TO %s", tableName, columnName, newColumnName));
     }
 
     public String getTableScheme(String tableName) throws Exception {
@@ -86,24 +72,27 @@ public class TableEditor implements AutoCloseable {
         }
     }
 
+    public void createStatement(String sql) throws SQLException {
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(sql);
+        }
+    }
+
     public static void main(String[] args) throws Exception {
         Properties properties = new Properties();
         try (InputStream in = TableEditor.class.getClassLoader().getResourceAsStream("app.properties")) {
             properties.load(in);
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         TableEditor te = new TableEditor(properties);
         te.initConnection();
-        te.createTable("wow");
-        System.out.println(te.getTableScheme("wow"));
-        te.addColumn("wow", "hype", "varchar(255)");
-        System.out.println(te.getTableScheme("wow"));
-        te.renameColumn("wow", "hype", "job4j");
-        System.out.println(te.getTableScheme("wow"));
-        te.dropColumn("wow", "job4j");
-        System.out.println(te.getTableScheme("wow"));
-        te.dropTable("wow");
-        te.close();
+        te.createTable("myTable");
+        System.out.println(te.getTableScheme("myTable"));
+        te.addColumn("myTable", "first", "varchar(255)");
+        System.out.println(te.getTableScheme("myTable"));
+        te.renameColumn("myTable", "first", "third");
+        System.out.println(te.getTableScheme("myTable"));
+        te.dropColumn("myTable", "third");
+        System.out.println(te.getTableScheme("myTable"));
+        te.dropTable("myTable");
     }
 }
