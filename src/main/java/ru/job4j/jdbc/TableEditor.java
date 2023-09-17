@@ -1,5 +1,6 @@
 package ru.job4j.jdbc;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -82,6 +83,8 @@ public class TableEditor implements AutoCloseable {
         Properties properties = new Properties();
         try (InputStream in = TableEditor.class.getClassLoader().getResourceAsStream("app.properties")) {
             properties.load(in);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         TableEditor te = new TableEditor(properties);
         te.initConnection();
