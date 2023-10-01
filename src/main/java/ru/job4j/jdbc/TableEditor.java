@@ -21,9 +21,9 @@ public class TableEditor implements AutoCloseable {
     }
 
     private void initConnection() throws SQLException {
-        String url = properties.getProperty("hibernate.connection.url");
-        String login = properties.getProperty("hibernate.connection.username");
-        String password = properties.getProperty("hibernate.connection.password");
+        String url = properties.getProperty("jdbc.url");
+        String login = properties.getProperty("jdbc.username");
+        String password = properties.getProperty("jdbc.password");
         connection = DriverManager.getConnection(url, login, password);
     }
 
@@ -36,7 +36,7 @@ public class TableEditor implements AutoCloseable {
     }
 
     public void addColumn(String tableName, String columnName, String type) throws SQLException {
-        createStatement(String.format("ALTER TABLE %s ADD %s %s", tableName, columnName, type));
+        createStatement(String.format("ALTER TABLE %s ADD IF NOT EXISTS %s %s", tableName, columnName, type));
     }
 
     public void dropColumn(String tableName, String columnName) throws SQLException {

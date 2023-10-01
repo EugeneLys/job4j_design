@@ -1,13 +1,13 @@
 package ru.job4j.spammer;
 
+import ru.job4j.jdbc.TableEditor;
+
 import java.io.*;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Pattern;
 
 public class ImportDB {
 
@@ -21,8 +21,10 @@ public class ImportDB {
 
     public List<User> load() throws IOException {
         List<User> users = new ArrayList<>();
+        String br = ";";
         try (BufferedReader rd = new BufferedReader(new FileReader(dump))) {
-            rd.lines().forEach(e -> users.add(new User()));
+            rd.lines().filter(this::checkUser)
+                    .forEach(e -> users.add(new User(e.substring(0, e.indexOf(br)), e.substring(e.indexOf(br) + 1))));
         }
         return users;
     }
@@ -35,12 +37,26 @@ public class ImportDB {
                 cfg.getProperty("jdbc.password")
         )) {
             for (User user : users) {
-                try (PreparedStatement ps = cnt.prepareStatement("INSERT INTO users ...")) {
+                try (PreparedStatement ps = cnt.prepareStatement("INSERT INTO users(name, email) values (?, ?)")) {
                     ps.setString(1, user.name);
                     ps.setString(2, user.email);
                     ps.execute();
                 }
             }
+        }
+    }
+
+    public boolean checkUser(String str) {
+        if (Pattern.matches("[^;]+;$", str)) {
+            throw new IllegalArgumentException("bad spammer data - no email");
+        }
+        if (Pattern.matches("[;].+@.+;", str)) {
+            throw new IllegalArgumentException("bad spammer data - no name");
+        }
+        if (Pattern.matches("^[;]$", str)) {
+            throw new IllegalArgumentException("spammer data is empty");
+        } else {
+            return true;
         }
     }
 
@@ -54,13 +70,16 @@ public class ImportDB {
         }
     }
 
-
     public static void main(String[] args) throws Exception {
         Properties cfg = new Properties();
-        try (InputStream in = ImportDB.class.getClassLoader().getResourceAsStream("app.properties")) {
+        try (InputStream in = ImportDB.class.getClassLoader().getResourceAsStream("app2.properties")) {
             cfg.load(in);
         }
-        ImportDB db = new ImportDB(cfg, "./dump.txt");
+        ImportDB db = new ImportDB(cfg, "C:\\projects\\job4j_design\\data\\dump.txt");
+        TableEditor editor = new TableEditor(cfg);
+        editor.createTable("users");
+        editor.addColumn("users", "name", "text");
+        editor.addColumn("users", "email", "text");
         db.save(db.load());
     }
 }
