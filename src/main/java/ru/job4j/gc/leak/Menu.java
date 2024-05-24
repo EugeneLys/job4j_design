@@ -14,7 +14,7 @@ public class Menu {
     public static final String COUNT = "Выберите количество создаваемых постов";
     public static final String TEXT_OF_POST = "Введите текст";
     public static final String EXIT = "Конец работы";
-    public static final String ID_FOR_DELETE = "Все посты удалены";
+    public static final String ID_FOR_DELETE = "Удаление постов выполнено";
 
     public static final String MENU = """
                 Введите 1 для создание поста.

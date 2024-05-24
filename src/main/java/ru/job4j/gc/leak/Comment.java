@@ -6,6 +6,12 @@ public class Comment {
 
     private User user;
 
+    @Override
+    public String toString() {
+        return "Comment{" + '\'' + text + '\''
+                + "" + "(" + user + ")" + '}';
+    }
+
     public Comment(String text, User user) {
         this.text = text;
         this.user = user;
@@ -25,10 +31,5 @@ public class Comment {
 
     public void setUser(User user) {
         this.user = user;
-    }
-
-    @Override
-    protected void finalize() throws Throwable {
-        super.finalize();
     }
 }
