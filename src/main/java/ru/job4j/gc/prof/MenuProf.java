@@ -4,7 +4,7 @@ import java.time.LocalTime;
 import java.util.Random;
 import java.util.Scanner;
 
-public class Menu {
+public class MenuProf {
 
     public static final int CREATE_ARRAY = 1;
     public static final int MERGE_SORT = 2;
