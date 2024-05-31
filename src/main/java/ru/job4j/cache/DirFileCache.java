@@ -19,14 +19,17 @@ public class DirFileCache extends AbstractCache<String, String> {
     @Override
     protected String load(String key) {
         String result = null;
-        try (FileReader reader = new FileReader(key)) {
-            result = String.valueOf(reader.read());
+        try (BufferedReader reader = new BufferedReader(new FileReader(key))) {
+            StringBuilder line = new StringBuilder();
+            while (reader.readLine() != null) {
+                line.append(reader.readLine());
+            }
+            result = String.valueOf(line);
         } catch (FileNotFoundException e) {
             System.out.println("File not found");;
         } catch (IOException e) {
             System.out.println("Wrong file name");;
         }
-        this.put(key, result);
         return result;
     }
 
