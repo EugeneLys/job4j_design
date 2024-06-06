@@ -7,7 +7,6 @@ import java.util.List;
 public class SoftDemo {
 
     public static void main(String[] args) {
-        //example1();
         example2();
     }
 
@@ -44,13 +43,10 @@ public class SoftDemo {
     private static void unsafe() {
         List<SoftReference<Object>> someData = new ArrayList<>();
         if (someData.get(0).get() != null) {
-            // do something
             System.out.println("java");
         } else {
-            // do something
             System.out.println("java");
         }
-        // do something
         someData.get(0).get();
     }
 
@@ -62,6 +58,5 @@ public class SoftDemo {
         } else {
             System.out.println("java");
         }
-        // work with strong
     }
 }
