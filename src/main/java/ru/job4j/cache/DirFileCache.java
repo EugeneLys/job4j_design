@@ -1,7 +1,6 @@
 package ru.job4j.cache;
 
 import java.io.*;
-import java.lang.ref.SoftReference;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -15,26 +14,15 @@ public class DirFileCache extends AbstractCache<String, String> {
 
     @Override
     protected String load(String key) {
+        String source = cachingDir.concat(key);
         String result = null;
         try {
-            result = Files.lines(Paths.get(key)).reduce("", String::concat);
+            result = Files.lines(Paths.get(source)).reduce("", (a, b) -> a + "\n" + b);
         } catch (FileNotFoundException e) {
-            System.out.println("File not found");;
+            System.out.println("File not found");
         } catch (IOException e) {
-            System.out.println("Wrong file name");;
+            System.out.println("Try again with correct file path and name");
         }
-        /*String name = String.join(cachingDir, key);
-        try (BufferedReader reader = new BufferedReader(new FileReader(name))) {
-            StringBuilder line = new StringBuilder();
-            while (reader.readLine() != null) {
-                line.append(reader.readLine());
-            }
-            result = String.valueOf(line);
-        } catch (FileNotFoundException e) {
-            System.out.println("File not found");;
-        } catch (IOException e) {
-            System.out.println("Wrong file name");;
-        }*/
         return result;
     }
 
