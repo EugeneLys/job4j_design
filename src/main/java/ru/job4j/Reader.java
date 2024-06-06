@@ -1,16 +1,13 @@
 package ru.job4j;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 
 public class Reader {
     public static void main(String[] args) throws IOException {
-        File file = new File("text.txt");
-        FileReader reader = new FileReader(file);
+        File file = new File("C:\\projects\\job4j_design\\src\\main\\java\\ru\\job4j\\cache\\text.txt");
+        BufferedReader reader = new BufferedReader(new FileReader(file));
         while (reader.ready()) {
-            System.out.println(reader.read());
+            System.out.println(reader.readLine());
         }
     }
 }
