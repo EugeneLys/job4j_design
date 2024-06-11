@@ -4,20 +4,17 @@ import java.io.*;
 
 public class Analysis {
     public void unavailable(String source, String target) {
+        boolean serverDown = false;
         try (BufferedReader reader = new BufferedReader(new FileReader(source));
-        BufferedWriter writer = new BufferedWriter(new FileWriter(target))) {
+             BufferedWriter writer = new BufferedWriter(new FileWriter(target))) {
             String str;
-            while (reader.ready()) {
-                str = reader.readLine();
-                if (str.startsWith("400") || str.startsWith("500")) {
+            while ((str = reader.readLine()) != null) {
+                if (!serverDown && (str.startsWith("400") || str.startsWith("500"))) {
                     writer.append(str, 4, str.length()).append(";");
-                    while (reader.ready()) {
-                        str = reader.readLine();
-                        if (str.startsWith("200") || str.startsWith("300")) {
-                            writer.append(str, 4, str.length()).append(";").append(System.lineSeparator());
-                            break;
-                        }
-                    }
+                    serverDown = true;
+                } else if (serverDown && (str.startsWith("200") || str.startsWith("300"))) {
+                    writer.append(str, 4, str.length()).append(";").append(System.lineSeparator());
+                    serverDown = false;
                 }
             }
         } catch (IOException e) {
