@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static ru.job4j.kiss.fool.Fool.check;
 
 class FoolTest {
 
@@ -18,11 +19,17 @@ class FoolTest {
     }
 
     @Test
-    void When3and5Denominator() {
-        Fool fool = new Fool();
-        var next = "13";
+    void whenCorrectAnswer() {
         var answer = "FizzBuzz";
-        Fool.check(next, answer);
-        assertEquals("Ошибка. Начинай снова.", output.toString().trim());
+        check("FizzBuzz", answer);
+        assertEquals("", output.toString().strip());
+    }
+
+
+    @Test
+    void whenWrongAnswer() {
+        var answer = "15";
+        check("FizzBuzz", answer);
+        assertEquals("Ошибка. Начинай снова.", output.toString().strip());
     }
 }

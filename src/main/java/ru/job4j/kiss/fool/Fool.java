@@ -31,7 +31,7 @@ public class Fool {
             if (startAt % 3 == 0 && startAt % 5 == 0) {
                 check("FizzBuzz", answer);
             } else if (startAt % 3 == 0) {
-                check("Fizz" ,answer);
+                check("Fizz", answer);
             } else if (startAt % 5 == 0) {
                 check("Buzz", answer);
             } else {

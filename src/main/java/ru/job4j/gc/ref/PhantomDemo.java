@@ -39,7 +39,7 @@ public class PhantomDemo {
         public void utilizeResource() {
             for (ListIterator<MyPhantom> i = phantoms.listIterator(); i.hasNext();) {
                 MyPhantom current = i.next();
-                if (current != null && current.isEnqueued()) {
+                if (current != null && current.enqueue()) {
                     System.out.println("Utilized " + current.get());
                     current.clear();
                     i.remove();
