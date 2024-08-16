@@ -5,39 +5,40 @@ import java.util.Scanner;
 public class Fool {
 
     static int startAt = 1;
+    static String word;
+    static String answer;
 
-    public static void check(String right, String answer) {
+    static void checkAnswer(String right, String answer) {
         if (!right.equals(answer)) {
             System.out.println("Ошибка. Начинай снова.");
             startAt = 0;
         }
     }
 
+    static void makeMove(boolean humanTurn) {
+        word = String.valueOf(startAt);
+        if (startAt % 3 == 0 && startAt % 5 == 0) {
+            word = "FizzBuzz";
+        } else if (startAt % 3 == 0) {
+            word = "Fizz";
+        } else if (startAt % 5 == 0) {
+            word = "Buzz";
+        }
+        if (humanTurn) {
+            checkAnswer(word, answer);
+        } else {
+            System.out.println(word);
+        }
+        startAt++;
+    }
+
     public static void main(String[] args) {
         System.out.println("Игра FizzBuzz.");
         var input = new Scanner(System.in);
         while (startAt < 100) {
-            if (startAt % 3 == 0 && startAt % 5 == 0) {
-                System.out.println("FizzBuzz");
-            } else if (startAt % 3 == 0) {
-                System.out.println("Fizz");
-            } else if (startAt % 5 == 0) {
-                System.out.println("Buzz");
-            } else {
-                System.out.println(startAt);
-            }
-            startAt++;
-            var answer = input.nextLine();
-            if (startAt % 3 == 0 && startAt % 5 == 0) {
-                check("FizzBuzz", answer);
-            } else if (startAt % 3 == 0) {
-                check("Fizz", answer);
-            } else if (startAt % 5 == 0) {
-                check("Buzz", answer);
-            } else {
-                check(String.valueOf(startAt), answer);
-            }
-            startAt++;
+            makeMove(false);
+            answer = input.nextLine();
+            makeMove(true);
         }
     }
 }

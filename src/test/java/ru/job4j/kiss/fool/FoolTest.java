@@ -7,7 +7,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static ru.job4j.kiss.fool.Fool.check;
+import static ru.job4j.kiss.fool.Fool.checkAnswer;
 
 class FoolTest {
 
@@ -21,7 +21,7 @@ class FoolTest {
     @Test
     void whenCorrectAnswer() {
         var answer = "FizzBuzz";
-        check("FizzBuzz", answer);
+        checkAnswer("FizzBuzz", answer);
         assertEquals("", output.toString().strip());
     }
 
@@ -29,7 +29,7 @@ class FoolTest {
     @Test
     void whenWrongAnswer() {
         var answer = "15";
-        check("FizzBuzz", answer);
+        checkAnswer("FizzBuzz", answer);
         assertEquals("Ошибка. Начинай снова.", output.toString().strip());
     }
 }
