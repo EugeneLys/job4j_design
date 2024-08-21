@@ -20,7 +20,6 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
             Map<String, String> map = new HashMap<>();
             map.put("city", "Moscow");
             map.put("country", "Russia");
-            Map<String, String> checkMap = null;
             Assertions.assertEquals(gen.produce(template, map), check);
         }
 
@@ -31,7 +30,6 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
             Map<String, String> map = new HashMap<>();
             map.put("city", "Moscow");
             map.put("country", "Russia");
-            Map<String, String> checkMap = null;
             assertThatIllegalArgumentException()
                     .isThrownBy(() -> gen.produce(template, map))
                     .withMessageContaining("no key found");
@@ -44,7 +42,6 @@ import static org.assertj.core.api.Assertions.assertThatIllegalArgumentException
         Map<String, String> map = new HashMap<>();
         map.put("city", "Moscow");
         map.put("country", "Russia");
-        Map<String, String> checkMap = null;
         assertThatIllegalArgumentException()
                 .isThrownBy(() -> gen.produce(template, map))
                 .withMessageContaining("extra key found");
