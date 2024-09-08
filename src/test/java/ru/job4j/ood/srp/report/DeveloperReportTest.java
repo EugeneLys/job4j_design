@@ -21,11 +21,12 @@ class DeveloperReportTest {
         Report engine = new DeveloperReport(store, parser);
         StringBuilder expected = new StringBuilder()
                 .append("Name;Hired;Fired;Salary;")
-                .append("\r\n")
+                .append(System.lineSeparator())
                 .append(worker.getName()).append(";")
                 .append(parser.parse(worker.getHired())).append(";")
                 .append(parser.parse(worker.getFired())).append(";")
-                .append(worker.getSalary()).append("\r\n");
+                .append(worker.getSalary())
+                .append(System.lineSeparator());
         assertThat(engine.generate(employee -> true)).isEqualTo(expected.toString());
     }
 }
