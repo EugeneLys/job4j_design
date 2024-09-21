@@ -21,7 +21,17 @@ public class JSONReport implements Report {
 
     @Override
     public String generate(Predicate<Employee> filter) {
-        var library = new GsonBuilder().setPrettyPrinting().create();
+        var library = new GsonBuilder().registerTypeAdapter(Employee.class, new EmployeeJsonSerializer())
+                .setPrettyPrinting().create();
         return library.toJson(store.findBy(filter));
     }
+
+    /*private Store change(Store store) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Store second;
+        for (Employee e : store.findBy(e -> true)) {
+
+        }
+    }*/
+    //написать метод, меняющий вид записи даты в Employee
 }

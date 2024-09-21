@@ -1,7 +1,6 @@
 package ru.job4j.ood.srp.report;
 
 import org.junit.jupiter.api.Test;
-;
 import ru.job4j.ood.srp.store.MemoryStore;
 import ru.job4j.ood.srp.model.Employee;
 
