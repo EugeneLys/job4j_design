@@ -7,6 +7,7 @@ import ru.job4j.ood.srp.formatter.ReportDateTimeParser;
 import ru.job4j.ood.srp.model.Employee;
 import ru.job4j.ood.srp.store.MemoryStore;
 
+import javax.xml.bind.JAXBException;
 import java.util.Calendar;
 
 import static org.assertj.core.api.Assertions.*;
@@ -16,7 +17,7 @@ import static ru.job4j.ood.srp.currency.Currency.USD;
 class AccountantReportTest {
 
     @Test
-    public void whenCorrectUSDReportGenerated() {
+    public void whenCorrectUSDReportGenerated() throws JAXBException {
         MemoryStore store = new MemoryStore();
         Calendar now = Calendar.getInstance();
         Employee worker = new Employee("Ivan", now, now, 100);
@@ -36,7 +37,7 @@ class AccountantReportTest {
     }
 
     @Test
-    public void whenCorrectEURReportGenerated() {
+    public void whenCorrectEURReportGenerated() throws JAXBException {
         MemoryStore store = new MemoryStore();
         Calendar now = Calendar.getInstance();
         Employee worker = new Employee("Ivan", now, now, 100);

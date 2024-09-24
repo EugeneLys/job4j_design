@@ -3,12 +3,9 @@ package ru.job4j.ood.srp.report;
 import org.junit.jupiter.api.Test;
 import ru.job4j.ood.srp.store.MemoryStore;
 import ru.job4j.ood.srp.model.Employee;
-
 import javax.xml.bind.JAXBException;
-
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 class JSONReportTest {

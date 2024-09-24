@@ -5,7 +5,6 @@ import ru.job4j.ood.srp.model.Employee;
 
 import java.lang.reflect.Type;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 
 public class EmployeeJsonSerializer implements JsonSerializer {
 
@@ -14,10 +13,8 @@ public class EmployeeJsonSerializer implements JsonSerializer {
     public static String fired = "fired";
     public static String salary = "salary";
 
-
     @Override
     public JsonElement serialize(Object o, Type type, JsonSerializationContext jsonSerializationContext) {
-
         Employee employee = (Employee) o;
         SimpleDateFormat sdf = new SimpleDateFormat("dd:MM:yyyy HH:mm");
         JsonObject jsonObject = new JsonObject();
