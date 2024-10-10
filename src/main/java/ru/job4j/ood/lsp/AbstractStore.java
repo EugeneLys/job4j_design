@@ -17,8 +17,14 @@ public class AbstractStore implements Store {
     }
 
     @Override
-    public boolean replace(Food food, Store store) {
-        return false;
+    public boolean replace(Food food, List<Food> foods) {
+        boolean rsl = false;
+        if (food != null || list != null) {
+            foods.add(food);
+            list.remove(food);
+            rsl = true;
+        }
+        return rsl;
     }
 
     @Override

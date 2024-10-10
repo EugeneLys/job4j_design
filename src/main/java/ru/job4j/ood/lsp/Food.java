@@ -8,7 +8,7 @@ public class Food {
     String name;
     LocalDate expiryDate;
     LocalDate createDate;
-    int price;
+    double price;
     int discount;
 
     public Food(String name, LocalDate expiryDate, LocalDate createDate, int price, int discount) {
@@ -43,7 +43,7 @@ public class Food {
         this.createDate = createDate;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 
@@ -57,5 +57,6 @@ public class Food {
 
     public void setDiscount(int discount) {
         this.discount = discount;
+        this.price = price - price * discount / 100.0;
     }
 }

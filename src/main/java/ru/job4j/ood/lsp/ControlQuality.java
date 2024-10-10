@@ -24,17 +24,23 @@ public class ControlQuality {
     }
 
     public void distributeAll() {
+        List<Food> list = new ArrayList<>();
         for (Store store : stores) {
-            distribute(store.findAll());
+            for (Food food : store.findAll()) {
+                store.replace(food, list);
+            }
+        }
+        for (Food f : list) {
+            add(f);
         }
     }
 
-    public void distribute(List<Food> list) {
+    public void addList(List<Food> list) {
         for (Food f : list) {
-            distributeOne(f);
+            add(f);
         }
     }
-    public void distributeOne(Food food) {
+    public void add(Food food) {
         long current = ChronoUnit.DAYS.between(today, food.expiryDate);
         long total = ChronoUnit.DAYS.between(food.createDate, food.expiryDate);
         float ratio = (float) current / total;

@@ -6,7 +6,7 @@ public interface Store {
 
     Food add(Food food);
 
-    boolean replace(Food food, Store store);
+    boolean replace(Food food, List<Food> list);
 
     boolean delete(String name);
 
