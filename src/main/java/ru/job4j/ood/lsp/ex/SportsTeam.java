@@ -1,4 +1,4 @@
-package ru.job4j.ood.lsp;
+package ru.job4j.ood.lsp.ex;
 
 import java.util.ArrayList;
 import java.util.List;
