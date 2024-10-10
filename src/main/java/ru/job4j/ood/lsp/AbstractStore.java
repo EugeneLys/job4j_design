@@ -2,7 +2,7 @@ package ru.job4j.ood.lsp;
 
 import java.util.List;
 
-public class AbstractStore implements Store {
+public abstract class AbstractStore implements Store {
 
     List<Food> list;
 
@@ -18,13 +18,7 @@ public class AbstractStore implements Store {
 
     @Override
     public boolean replace(Food food, List<Food> foods) {
-        boolean rsl = false;
-        if (food != null || list != null) {
-            foods.add(food);
-            list.remove(food);
-            rsl = true;
-        }
-        return rsl;
+        return false;
     }
 
     @Override

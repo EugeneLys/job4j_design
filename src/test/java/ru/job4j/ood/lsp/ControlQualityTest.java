@@ -11,18 +11,26 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ControlQualityTest {
 
+    /*
+    Тест проверяет корректность выполнения принудительной сортировки хранилища
+    (метод distributeAll() класса ControlQuality).
+    Два продукта, по свойствам соответствующие хранилищам
+    shop и trash, изначально добавляются в warehouse и должны распределиться
+    по "правильным" хранилищам (с добавлением скидки).
+     */
     @Test
     void whenDistributeAllExistingFoodInStore() {
         Warehouse warehouse = new Warehouse(new ArrayList<>());
         Shop shop = new Shop(new ArrayList<>());
         Trash trash = new Trash(new ArrayList<>());
         List<Store> storage = List.of(warehouse, shop, trash);
-        Food close = new Food("bread", LocalDate.of(2024, 10, 11),
+        LocalDate oneDayToOverdue = LocalDate.now().plusDays(1);
+        Food close = new Food("bread", oneDayToOverdue,
                 LocalDate.of(2024, 9, 1), 100, 0);
         Food overdue = new Food("milk", LocalDate.of(2024, 10, 8),
                 LocalDate.of(2024, 9, 1), 100, 0);
-        trash.add(close);
-        trash.add(overdue);
+        warehouse.add(close);
+        warehouse.add(overdue);
         ControlQuality controlQuality = new ControlQuality(storage);
         controlQuality.distributeAll();
         assertTrue(shop.list.contains(shop.findByName("bread")));
@@ -30,20 +38,25 @@ class ControlQualityTest {
         assertTrue(trash.list.contains(trash.findByName("milk")));
     }
 
+    /*
+    Тест проверяет корректность добавления новых продуктов в хранилища сразу списком.
+    (метод addList() класса ControlQuality)
+     */
     @Test
     void whenAddListOfFood() {
         Warehouse warehouse = new Warehouse(new ArrayList<>());
         Shop shop = new Shop(new ArrayList<>());
         Trash trash = new Trash(new ArrayList<>());
         List<Store> storage = List.of(warehouse, shop, trash);
+        LocalDate oneDayToOverdue = LocalDate.now().plusDays(1);
         List<Food> lot = new ArrayList<>();
-        Food close = new Food("bread", LocalDate.of(2024, 10, 11),
+        Food close = new Food("bread", oneDayToOverdue,
                 LocalDate.of(2024, 9, 1), 100, 0);
         Food overdue = new Food("milk", LocalDate.of(2024, 10, 8),
                 LocalDate.of(2024, 9, 1), 100, 0);
         lot.add(close);
         lot.add(overdue);
-        int expectedPrice = 80;
+        double expectedPrice = 80.0;
         ControlQuality controlQuality = new ControlQuality(storage);
         controlQuality.addList(lot);
         assertTrue(shop.list.contains(shop.findByName("bread")));
@@ -51,17 +64,22 @@ class ControlQualityTest {
         assertTrue(trash.list.contains(trash.findByName("milk")));
     }
 
+    /*
+    Тест добавления нового продукта в хранилища.
+    (метод add() класса ControlQuality)
+     */
     @Test
     void whenAddNewFood() {
         Warehouse warehouse = new Warehouse(new ArrayList<>());
         Shop shop = new Shop(new ArrayList<>());
         Trash trash = new Trash(new ArrayList<>());
         List<Store> storage = List.of(warehouse, shop, trash);
-        Food close = new Food("bread", LocalDate.of(2024, 10, 11),
+        LocalDate oneDayToOverdue = LocalDate.now().plusDays(1);
+        Food close = new Food("bread", oneDayToOverdue,
                 LocalDate.of(2024, 9, 1), 100, 0);
         Food overdue = new Food("milk", LocalDate.of(2024, 10, 8),
                 LocalDate.of(2024, 9, 1), 100, 0);
-        int expectedPrice = 80;
+        double expectedPrice = 80.0;
         ControlQuality controlQuality = new ControlQuality(storage);
         controlQuality.add(close);
         controlQuality.add(overdue);
