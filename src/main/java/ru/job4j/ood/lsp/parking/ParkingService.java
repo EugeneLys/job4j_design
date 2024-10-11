@@ -27,4 +27,12 @@ public class ParkingService implements Parking {
     public List<Integer> findPlace() {
         return null;
     }
+
+    public ParkingSpace getSpace() {
+        return space;
+    }
+
+    public void setSpace(ParkingSpace space) {
+        this.space = space;
+    }
 }
