@@ -5,11 +5,11 @@ import java.util.Date;
 
 public class Food {
 
-    String name;
-    LocalDate expiryDate;
-    LocalDate createDate;
-    double price;
-    int discount;
+    private String name;
+    private LocalDate expiryDate;
+    private LocalDate createDate;
+    private double price;
+    private int discount;
 
     public Food(String name, LocalDate expiryDate, LocalDate createDate, int price, int discount) {
         this.name = name;

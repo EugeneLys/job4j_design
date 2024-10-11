@@ -52,8 +52,8 @@ public class ControlQuality {
     Метод добавляет одну единицу продуктов в хранилища.
      */
     public void add(Food food) {
-        long current = ChronoUnit.DAYS.between(today, food.expiryDate);
-        long total = ChronoUnit.DAYS.between(food.createDate, food.expiryDate);
+        long current = ChronoUnit.DAYS.between(today, food.getExpiryDate());
+        long total = ChronoUnit.DAYS.between(food.getCreateDate(), food.getExpiryDate());
         float ratio = (float) current / total;
         int index = 0;
         if (ratio < 0.75) {
