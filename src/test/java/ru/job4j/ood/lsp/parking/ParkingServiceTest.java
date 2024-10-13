@@ -2,6 +2,7 @@ package ru.job4j.ood.lsp.parking;
 
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -16,7 +17,7 @@ class ParkingServiceTest {
     с указанием их имен на соответствующих парковочных местах.
      */
     @Test
-    void whenCorrectParkTwoCarsAndOneTruck() {
+    void whenCorrectParkTwoCarsAndOneTruck() throws IOException {
         ParkingSpace space = new ParkingSpace(2, 2);
         ParkingService service = new ParkingService(space);
         Vehicle car1 = new Vehicle("car1", 1);
@@ -39,7 +40,7 @@ class ParkingServiceTest {
     При этом запись о другом, не удаляемом автомобиле ("car2"), остается.
      */
     @Test
-    void whenDeleteCars() {
+    void whenDeleteCars() throws IOException {
         ParkingSpace space = new ParkingSpace(2, 2);
         ParkingService service = new ParkingService(space);
         Vehicle car1 = new Vehicle("car1", 1);
@@ -65,7 +66,7 @@ class ParkingServiceTest {
     следующий грузовик должен быть записан на местах парковки для легковых автомобилей.
      */
     @Test
-    void whenNoFreePlaceThenParkTruckToCars() {
+    void whenNoFreePlaceThenParkTruckToCars() throws IOException {
         ParkingSpace space = new ParkingSpace(2, 2);
         ParkingService service = new ParkingService(space);
         Vehicle truck1 = new Vehicle("truck1", 2);
@@ -83,7 +84,7 @@ class ParkingServiceTest {
     должно быть выброшено исключение (на грузовую не паркуется).
      */
     @Test
-    void whenNoFreePlaceForCarThenException() {
+    void whenNoFreePlaceForCarThenException() throws IOException {
         ParkingSpace space = new ParkingSpace(2, 2);
         ParkingService service = new ParkingService(space);
         Vehicle car1 = new Vehicle("car1", 1);
@@ -99,7 +100,7 @@ class ParkingServiceTest {
     Когда недостаточно места на парковке для грузовиков, грузовик паркуется на местах для легковых автомобилей.
      */
     @Test
-    void whenNotEnoughPlaceForTruckThenParkToCars() {
+    void whenNotEnoughPlaceForTruckThenParkToCars() throws IOException {
         ParkingSpace space = new ParkingSpace(3, 2);
         ParkingService service = new ParkingService(space);
         Vehicle truck1 = new Vehicle("truck1", 3);
@@ -115,7 +116,7 @@ class ParkingServiceTest {
     грузовик не может припарковаться ( -> Exception).
      */
     @Test
-    void whenNoCarsPlaceForTruckThenException() {
+    void whenNoCarsPlaceForTruckThenException() throws IOException {
         ParkingSpace space = new ParkingSpace(2, 2);
         ParkingService service = new ParkingService(space);
         Vehicle car1 = new Vehicle("car1", 1);
@@ -125,5 +126,19 @@ class ParkingServiceTest {
         service.park(truck1);
         assertThatThrownBy(() -> service.park(truck2))
                 .isInstanceOf(Exception.class).hasMessageContaining("Can't park this vehicle - no free place.");
+    }
+
+    /*
+    Когда паркуется машина с таким же именем, как и у ранее припаркованной, то выбрасывается исключение.
+     */
+    @Test
+    void whenVehicleNameAlreadyExist() throws IOException {
+        ParkingSpace space = new ParkingSpace(3, 2);
+        ParkingService service = new ParkingService(space);
+        Vehicle car1 = new Vehicle("car", 1);
+        Vehicle car2 = new Vehicle("car", 1);
+        service.park(car1);
+        assertThatThrownBy(() -> service.park(car2))
+                .isInstanceOf(Exception.class).hasMessageContaining("The vehicle with such name is already parked.");
     }
 }

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -34,7 +35,7 @@ class ParkingSpaceTest {
     Проверка поиска машины по имени.
      */
     @Test
-    void whenFindByName() {
+    void whenFindByName() throws IOException {
         ParkingSpace space = new ParkingSpace(3, 2);
         Vehicle car = new Vehicle("car1", 1);
         space.setCars(List.of(new Place(car.getName(), 1),

@@ -1,5 +1,7 @@
 package ru.job4j.ood.lsp.parking;
 
+import java.util.Objects;
+
 public class Place {
 
     /*
@@ -27,5 +29,18 @@ public class Place {
 
     public void setNumber(int number) {
         this.number = number;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Place place = (Place) o;
+        return number == place.number && vehicleName.equals(place.vehicleName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(vehicleName, number);
     }
 }
