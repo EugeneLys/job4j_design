@@ -13,11 +13,11 @@ public class Place {
         this.number = number;
     }
 
-    public String getCarName() {
+    public String getVehicleName() {
         return vehicleName;
     }
 
-    public void setCarName(String carName) {
+    public void setVehicleName(String carName) {
         this.vehicleName = carName;
     }
 
