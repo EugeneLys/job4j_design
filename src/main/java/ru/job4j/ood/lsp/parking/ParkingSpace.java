@@ -31,4 +31,8 @@ public class ParkingSpace {
     public void setTrucks(List<Place> trucks) {
         this.trucks = trucks;
     }
+
+    public Vehicle findByName(String name) {
+        return null;
+    }
 }
