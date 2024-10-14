@@ -48,21 +48,37 @@ public class ParkingService implements Parking {
                 result = true;
             }
         }
+        if (!result) {
+            throw new IOException("Can't park this vehicle - no free place.");
+        }
         return result;
     }
 
     @Override
-    public boolean remove(Vehicle vehicle) {
-        return false;
+    public boolean remove(Vehicle vehicle) throws IOException {
+        boolean result = false;
+        for (Place place : space.getTrucks()) {
+            if (vehicle.getName().equals(place.getVehicleName())) {
+                place.setVehicleName(null);
+                result = true;
+            }
+        }
+        for (Place place : space.getCars()) {
+            if (vehicle.getName().equals(place.getVehicleName())) {
+                place.setVehicleName(null);
+                result = true;
+            }
+        }
+        return result;
     }
 
     @Override
-    public List<Integer> findPlace(List<Place> list) {
-        List<Integer> result = new ArrayList<>();
-        for (Place p : list) {
-            if (p.getVehicleName() == null) {
-                result.add(p.getNumber());
-            }
+    public boolean findPlace(List<Place> list, Vehicle vehicle) {
+        boolean result = true;
+        if (list == space.getTrucks()) {
+            result = vehicle.getSize() <= space.getTrucksCapacity();
+        } else if (list == space.getCars()) {
+            result = vehicle.getSize() <= space.getCarsCapacity();
         }
         return result;
     }

@@ -7,7 +7,7 @@ public interface Parking {
 
     boolean park(Vehicle vehicle) throws IOException;
 
-    boolean remove(Vehicle vehicle);
+    boolean remove(Vehicle vehicle) throws IOException;
 
-    List<Integer> findPlace(List<Place> list);
+    boolean findPlace(List<Place> list, Vehicle vehicle);
 }
