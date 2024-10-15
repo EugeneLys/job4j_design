@@ -18,34 +18,19 @@ public class ParkingService implements Parking {
     @Override
     public boolean park(Vehicle vehicle) throws IOException {
         boolean result = false;
-        String check = vehicle.getName();
-        Vehicle checkV = space.findByName(check);
-        if (checkV != null && checkV.getName().equals(vehicle.getName())) {
+        String name = vehicle.getName();
+        Vehicle checkV = space.findByName(name);
+        if (checkV != null && checkV.getName().equals(name)) {
             throw new IOException("The vehicle with such name is already parked.");
         }
         int size = vehicle.getSize();
-        List<Place> temp;
-        int allow;
-        if (size > 1) {
-            temp = space.getTrucks();
-            allow = space.getTrucksCapacity();
-            if (allow >= size) {
-                while (size > 0) {
-                    temp.add(new Place(check, space.getInitialTrucksCapacity() - space.getTrucksCapacity() + 1));
-                    space.setTrucksCapacity(space.getTrucksCapacity() - 1);
-                    size--;
-                }
-                space.setTrucks(temp);
-                result = true;
-            }
+        if (size == 1) {
+            parkCar(size, name);
+            result = true;
         } else {
-            temp = space.getCars();
-            allow = space.getCarsCapacity();
-            if (allow > 0) {
-                temp.add(new Place(check, space.getInitialCarsCapacity() - space.getCarsCapacity() + 1));
-                space.setCarsCapacity(space.getCarsCapacity() - 1);
-                space.setCars(temp);
-                result = true;
+            result = parkTruck(size, name);
+            if (!result) {
+                result = parkCar(size, name);
             }
         }
         if (!result) {
@@ -79,6 +64,39 @@ public class ParkingService implements Parking {
             result = vehicle.getSize() <= space.getTrucksCapacity();
         } else if (list == space.getCars()) {
             result = vehicle.getSize() <= space.getCarsCapacity();
+        }
+        return result;
+    }
+
+    private boolean parkCar(int size, String name) throws IOException {
+        List<Place> temp = space.getCars();
+        boolean result = false;
+        int capacity = space.getCarsCapacity();
+        if (size <= capacity) {
+            while (size > 0) {
+                temp.add(new Place(name, space.getInitialCarsCapacity() - space.getCarsCapacity() + 1));
+                space.setCarsCapacity(capacity--);
+                size--;
+            }
+            space.setCarsCapacity(capacity);
+            space.setCars(temp);
+            result = true;
+        }
+        return result;
+    }
+
+    private boolean parkTruck(int size, String name) throws IOException {
+        List<Place> temp = space.getTrucks();
+        boolean result = false;
+        int capacity = space.getTrucksCapacity();
+        if (size <= capacity) {
+            while (size > 0) {
+                temp.add(new Place(name, space.getInitialCarsCapacity() - space.getCarsCapacity() + 1));
+                space.setTrucksCapacity(capacity--);
+                size--;
+            }
+            space.setTrucks(temp);
+            result = true;
         }
         return result;
     }
