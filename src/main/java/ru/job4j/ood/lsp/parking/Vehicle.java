@@ -45,8 +45,12 @@ public class Vehicle {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Vehicle vehicle = (Vehicle) o;
         return size == vehicle.size && Objects.equals(name, vehicle.name);
     }

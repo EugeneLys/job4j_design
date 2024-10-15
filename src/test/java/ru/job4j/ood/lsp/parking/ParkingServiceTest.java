@@ -6,8 +6,7 @@ import java.io.IOException;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 class ParkingServiceTest {
 
@@ -49,16 +48,29 @@ class ParkingServiceTest {
         service.park(car1);
         service.park(car2);
         service.park(truck1);
-        assertEquals("car1", space.getCars().get(0).getVehicleName());
-        assertEquals("car2", space.getCars().get(1).getVehicleName());
-        assertEquals("truck1", space.getTrucks().get(0).getVehicleName());
-        assertEquals("truck1", space.getTrucks().get(1).getVehicleName());
         service.remove(space.findByName("car1"));
         service.remove(space.findByName("truck1"));
-        assertNull(space.getCars().get(0).getVehicleName());
-        assertNull(space.getTrucks().get(0).getVehicleName());
-        assertNull(space.getTrucks().get(1).getVehicleName());
-        assertEquals("car2", space.getCars().get(1).getVehicleName());
+        assertNull(space.findByName("car1"));
+        assertNull(space.findByName("truck1"));
+        Vehicle expected = new Vehicle("car2", 1);
+        assertEquals(expected, space.findByName("car2"));
+    }
+
+    /*
+    После удаления с парковки ранее припаркованных машин,
+    на "их" места можно добавить новые машины.
+     */
+    @Test
+    void whenDeleteAndAddCars() throws IOException {
+        ParkingSpace space = new ParkingSpace(1,  0);
+        ParkingService service = new ParkingService(space);
+        Vehicle car1 = new Vehicle("car1", 1);
+        service.park(car1);
+        assertEquals("car1", space.getCars().get(0).getVehicleName());
+        service.remove(space.findByName("car1"));
+        Vehicle car2 = new Vehicle("car2", 1);
+        service.park(car2);
+        assertEquals("car2", space.getCars().get(0).getVehicleName());
     }
 
     /*
@@ -108,7 +120,7 @@ class ParkingServiceTest {
         assertEquals("truck1", space.getCars().get(0).getVehicleName());
         assertEquals("truck1", space.getCars().get(1).getVehicleName());
         assertEquals("truck1", space.getCars().get(2).getVehicleName());
-        assertNull(space.getTrucks().get(0).getVehicleName());
+        assertEquals(0, space.getTrucks().size());
     }
 
     /*
