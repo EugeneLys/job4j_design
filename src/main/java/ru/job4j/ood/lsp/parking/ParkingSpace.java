@@ -8,11 +8,13 @@ public class ParkingSpace {
 
     /*
     Парковка состоит из отдельных списков мест для легковых и грузовых машин
+    Приватные переменные с ключевым словом "Capacity" определяют
+    начальное и текущее числа доступных мест на парковке (т.е. в cars и trucks).
     */
-    private int initialCarsCapacity;
-    private int initialTrucksCapacity;
-    private int carsCapacity;
-    private int trucksCapacity;
+    private final int initialCarsCapacity;
+    private final int initialTrucksCapacity;
+    private int currentCarsCapacity;
+    private int currentTrucksCapacity;
     private List<Place> cars;
     private List<Place> trucks;
 
@@ -21,8 +23,8 @@ public class ParkingSpace {
         this.initialTrucksCapacity = initialTrucksCapacity;
         this.cars = new ArrayList<>(initialCarsCapacity);
         this.trucks = new ArrayList<>(initialTrucksCapacity);
-        setCarsCapacity(initialCarsCapacity);
-        setTrucksCapacity(initialTrucksCapacity);
+        setCurrentCarsCapacity(initialCarsCapacity);
+        setCurrentTrucksCapacity(initialTrucksCapacity);
     }
 
     public int getInitialCarsCapacity() {
@@ -33,20 +35,20 @@ public class ParkingSpace {
         return initialTrucksCapacity;
     }
 
-    public void setCarsCapacity(int carsCapacity) {
-        this.carsCapacity = carsCapacity;
+    public void setCurrentCarsCapacity(int currentCarsCapacity) {
+        this.currentCarsCapacity = currentCarsCapacity;
     }
 
-    public void setTrucksCapacity(int truckCapacity) {
-        this.trucksCapacity = truckCapacity;
+    public void setCurrentTrucksCapacity(int truckCapacity) {
+        this.currentTrucksCapacity = truckCapacity;
     }
 
-    public int getCarsCapacity() {
-        return carsCapacity;
+    public int getCurrentCarsCapacity() {
+        return currentCarsCapacity;
     }
 
-    public int getTrucksCapacity() {
-        return trucksCapacity;
+    public int getCurrentTrucksCapacity() {
+        return currentTrucksCapacity;
     }
 
     public List<Place> getCars() {
@@ -67,18 +69,19 @@ public class ParkingSpace {
 
     public Vehicle findByName(String name) throws IOException {
         int size = 0;
+        String next;
         Vehicle result = null;
         for (Place car : cars) {
-            String check = car.getVehicleName();
-            if (name.equals(check)) {
-                return new Vehicle(check, 1);
+            next = car.getVehicleName();
+            if (name.equals(next)) {
+                return new Vehicle(next, 1);
             }
         }
         for (Place truck : trucks) {
-            String check = truck.getVehicleName();
-            if (name.equals(check)) {
+            next = truck.getVehicleName();
+            if (name.equals(next)) {
                 size++;
-                result = new Vehicle(check, size);
+                result = new Vehicle(next, size);
             }
         }
         return result;

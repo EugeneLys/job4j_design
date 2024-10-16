@@ -61,7 +61,7 @@ class ParkingServiceTest {
     на "их" места можно добавить новые машины.
      */
     @Test
-    void whenDeleteAndAddCars() throws IOException {
+    void whenDeleteAndAgainAddCars() throws IOException {
         ParkingSpace space = new ParkingSpace(1,  0);
         ParkingService service = new ParkingService(space);
         Vehicle car1 = new Vehicle("car1", 1);

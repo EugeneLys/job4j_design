@@ -10,8 +10,8 @@ public class Place {
     private String vehicleName;
     private int number;
 
-    public Place(String carName, int number) {
-        this.vehicleName = carName;
+    public Place(String vehicleName, int number) {
+        this.vehicleName = vehicleName;
         this.number = number;
     }
 

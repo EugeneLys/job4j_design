@@ -15,22 +15,23 @@ public class ParkingService implements Parking {
         this.space = space;
     }
 
+    /*
+    Метод исследует автомобиль, по результатам определяет порядок его парковки
+    и вызывает приватный метод findPlace с нужными аргументами.
+     */
     @Override
     public boolean park(Vehicle vehicle) throws IOException {
         boolean result;
         String name = vehicle.getName();
-        Vehicle checkV = space.findByName(name);
-        if (checkV != null && checkV.getName().equals(name)) {
+        int size = vehicle.getSize();
+        Vehicle existing = space.findByName(name);
+        if (existing != null && existing.getName().equals(name)) {
             throw new IOException("The vehicle with such name is already parked.");
         }
-        int size = vehicle.getSize();
         if (size == 1) {
-            result = parkCar(size, name);
+            result = findPlace(size, name, false);
         } else {
-            result = parkTruck(size, name);
-            if (!result) {
-                result = parkCar(size, name);
-            }
+            result = findPlace(size, name, true) || findPlace(size, name, false);
         }
         if (!result) {
             throw new IOException("Can't park this vehicle - no free place.");
@@ -40,61 +41,51 @@ public class ParkingService implements Parking {
 
     @Override
     public boolean remove(Vehicle vehicle) throws IOException {
+        boolean result = false;
         List<Place> temp;
-        boolean result = false;
-        int capC = space.getInitialCarsCapacity();
-        int capT = space.getInitialTrucksCapacity();
-        for (Place place : space.getCars()) {
-            temp = new ArrayList<>(capC);
+        boolean truck = vehicle.getSize() > 1;
+        List<Place> list = truck ? space.getTrucks() : space.getCars();
+        int cap = vehicle.getSize() == 1 ? space.getInitialCarsCapacity() : space.getInitialTrucksCapacity();
+        for (Place place : list) {
+            temp = new ArrayList<>(cap);
             if (!vehicle.getName().equals(place.getVehicleName())) {
                 temp.add(place);
+                result = true;
                 }
+            if (truck) {
+                space.setTrucks(temp);
+                space.setCurrentTrucksCapacity(cap);
+            } else {
                 space.setCars(temp);
-            space.setCarsCapacity(capC);
+                space.setCurrentCarsCapacity(cap);
             }
-        for (Place place : space.getTrucks()) {
-            temp = new ArrayList<>(capT);
-            if (!vehicle.getName().equals(place.getVehicleName())) {
-                temp.add(place);
-            }
-            space.setTrucks(temp);
-            space.setTrucksCapacity(capT);
         }
         return result;
     }
 
-    private boolean parkCar(int size, String name) {
-        List<Place> temp = space.getCars();
-        boolean result = false;
-        int capacity = space.getCarsCapacity();
+    /*
+    Метод определяет механизм поиска мест на парковке и размещения на них (нем) автомобиля.
+     */
+    private boolean findPlace(int size, String name, boolean truck) {
+        List<Place> temp = truck ? space.getTrucks() : space.getCars();
+        int capacity = truck ? space.getCurrentTrucksCapacity() : space.getCurrentCarsCapacity();
+        int init = truck ? space.getInitialTrucksCapacity() : space.getInitialCarsCapacity();
         if (size <= capacity) {
             while (size > 0) {
-                temp.add(new Place(name, space.getInitialCarsCapacity() - space.getCarsCapacity() + 1));
+                temp.add(new Place(name, init - capacity + 1));
                 capacity--;
-                space.setCarsCapacity(capacity);
                 size--;
+                if (truck) {
+                    space.setCurrentTrucksCapacity(capacity);
+                    space.setTrucks(temp);
+                } else {
+                    space.setCurrentCarsCapacity(capacity);
+                    space.setCars(temp);
+                }
             }
-            space.setCars(temp);
-            result = true;
+            return true;
         }
-        return result;
-    }
-
-    private boolean parkTruck(int size, String name) {
-        List<Place> temp = space.getTrucks();
-        boolean result = false;
-        int capacity = space.getTrucksCapacity();
-        if (size <= capacity) {
-            while (size > 0) {
-                temp.add(new Place(name, space.getInitialTrucksCapacity() - space.getTrucksCapacity() + 1));
-                capacity--;
-                space.setTrucksCapacity(capacity);
-                size--;
-            }
-            space.setTrucks(temp);
-            result = true;
-        }
-        return result;
+        return false;
     }
 
     public ParkingSpace getSpace() {
