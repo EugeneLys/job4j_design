@@ -34,9 +34,7 @@ public class ControlQuality {
                 store.replace(next.get(0), list);
             }
         }
-        for (Food f : list) {
-            add(f);
-        }
+        addList(list);
     }
 
     /*
