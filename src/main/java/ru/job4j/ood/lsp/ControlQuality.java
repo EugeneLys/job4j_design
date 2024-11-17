@@ -13,6 +13,7 @@ public class ControlQuality {
     public ControlQuality(List<Store> stores) {
         this.stores = stores;
         today = LocalDate.now();
+        resort();
     }
 
     public ControlQuality(Warehouse warehouse, Shop shop, Trash trash) {
@@ -21,11 +22,12 @@ public class ControlQuality {
         stores.add(shop);
         stores.add(trash);
         today = LocalDate.now();
+        resort();
     }
     /*
     Метод обеспечивает принудительный полный перебор всех хранилищ и сортировку продуктов в них на текущую дату.
      */
-    public void distributeAll() {
+    public void resort() {
         List<Food> list = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
             Store store = stores.get(i);

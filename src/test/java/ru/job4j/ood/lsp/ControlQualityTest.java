@@ -32,7 +32,7 @@ class ControlQualityTest {
         warehouse.add(close);
         warehouse.add(overdue);
         ControlQuality controlQuality = new ControlQuality(storage);
-        controlQuality.distributeAll();
+        controlQuality.resort();
         assertTrue(shop.list.contains(shop.findByName("bread")));
         assertEquals(20, close.getDiscount());
         assertTrue(trash.list.contains(trash.findByName("milk")));
