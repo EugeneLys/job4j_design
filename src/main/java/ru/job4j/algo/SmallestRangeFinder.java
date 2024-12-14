@@ -3,23 +3,23 @@ package ru.job4j.algo;
 import java.util.Arrays;
 
 public class SmallestRangeFinder {
-    static int first;
-    static int count;
 
     public static int[] findSmallestRange(int[] nums, int k) {
-        for (int i = 0; i < nums.length - 1; i++) {
-            first = i;
-            count = 1;
-            while (nums[i] < nums[i + 1]) {
-                count++;
-                if (count == k) {
-                    return new int[] {first, first + count - 1};
+        int left = 0;
+        int right;
+        while (left <= nums.length - k) {
+            right = left + 1;
+            while (nums[right] > nums[left] && nums[right] != nums[right - 1]) {
+                if (right - left == k - 1) {
+                    return new int[] {left, right};
                 }
-                i++;
+                right++;
             }
+            left++;
         }
         return null;
     }
+
 
     public static void main(String[] args) {
         int[] nums = {1, 3, 5, 7, 9};
