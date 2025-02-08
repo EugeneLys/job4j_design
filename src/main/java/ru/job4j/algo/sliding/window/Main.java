@@ -35,38 +35,33 @@ public class Main {
             if (i == 0) {
                 maxStart = intervals.get(i).start;
                 maxEnd = intervals.get(i).end;
-                activeIntervals.add(intervals.get(i));
-                i++;
+                activeIntervals.add(intervals.get(i++));
             }
             while (i < intervals.size()) {
-                if (intervals.get(i).start <= intervals.get(i - 1).end) {
-                    maxStart = intervals.get(i).start;
+                while (intervals.get(i).start <= intervals.get(i - 1).end) {
+                    maxEnd = intervals.get(i).start;
                     activeIntervals.add(intervals.get(i));
                     if (i < intervals.size() - 1) {
-                i++;
-            }
-                    while (i < intervals.size() - 1 && intervals.get(i).start <= intervals.get(i - 1).end) {
-                        activeIntervals.add(intervals.get(i));
                         i++;
+                    } else {
+                        break;
                     }
                 }
                 if (activeIntervals.size() > maxOverlap) {
-                    maxEnd = activeIntervals.peek().end;
+                    maxEnd = Math.max(maxEnd, activeIntervals.peek().end);
+                    maxStart = maxEnd - 1;
+                    maxOverlap = activeIntervals.size();
                 }
                 activeIntervals.clear();
-
-            }
-            /*if (i < intervals.size() - 1) {
                 i++;
-            }*/
+            }
         }
-
             return new int[]{
                     maxStart, maxEnd
             };
         }
 
-        public static void main (String[]args){
+        public static void main(String[]args) {
             List intervals = new ArrayList<>();
             intervals.add(new Interval(1, 4));
             intervals.add(new Interval(2, 6));
