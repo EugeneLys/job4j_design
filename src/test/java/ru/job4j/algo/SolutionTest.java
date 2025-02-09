@@ -12,20 +12,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SolutionTest {
 
-    /*@Test
+    @Test
     void whenCorrect() {
         Solution solution = new Solution();
-        String[] strs = new String[] {"eat", "tea", "tan", "ate", "nat", "bat"};
-        List<List<String>> expected = List.of(List.of("bat"), List.of("nat", "tan"), List.of("ate", "eat", "tea"));
-        assertEquals(solution.groupAnagrams(strs), expected);
-    }*/
-
-    @Test
-    void whenEmpty() {
-        Solution solution = new Solution();
-        String[] strs = new String[] {"", ""};
-        List<List<String>> expected = List.of(List.of("", ""));
-        assertEquals(solution.groupAnagrams(strs), expected);
+        int[] nums = new int[] {1,3,-1,-3,5,3,6,7};
+        int k = 3;
+        double[] result = solution.medianSlidingWindow(nums, k);
+        assertThat(new double[] {1.00000,-1.00000,-1.00000,3.00000,5.00000,6.00000}).containsExactly(result);
     }
 
+    @Test
+    void whenCorrect2() {
+        Solution solution = new Solution();
+        int[] nums = new int[] {2147483647,2147483647};
+        int k = 2;
+        double[] result = solution.medianSlidingWindow(nums, k);
+        assertThat(new double[] {2147483647}).containsExactly(result);
+    }
 }
