@@ -5,17 +5,30 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author Eugene
+ */
 public class ControlQuality {
 
     List<Store> stores;
     LocalDate today;
 
+    /**
+     *
+     * @param stores
+     */
     public ControlQuality(List<Store> stores) {
         this.stores = stores;
         today = LocalDate.now();
         resort();
     }
 
+    /**
+     *
+     * @param warehouse
+     * @param shop
+     * @param trash
+     */
     public ControlQuality(Warehouse warehouse, Shop shop, Trash trash) {
         assert false;
         stores.add(warehouse);
@@ -27,6 +40,7 @@ public class ControlQuality {
     /*
     Метод обеспечивает принудительный полный перебор всех хранилищ и сортировку продуктов в них на текущую дату.
      */
+
     public void resort() {
         List<Food> list = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
@@ -41,6 +55,11 @@ public class ControlQuality {
 
     /*
     Метод добавляет "лист" продуктов в хранилища (распределяет по ним)
+     */
+
+    /**
+     *
+     * @param list
      */
     public void addList(List<Food> list) {
         for (Food f : list) {
