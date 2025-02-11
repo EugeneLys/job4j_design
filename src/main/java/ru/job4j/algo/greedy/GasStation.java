@@ -1,6 +1,7 @@
 package ru.job4j.algo.greedy;
 
 class GasStation {
+
     public int canCompleteCircuit(int[] gas, int[] cost) {
         var result = -1;
         int totalGas, totalCost, tank;
