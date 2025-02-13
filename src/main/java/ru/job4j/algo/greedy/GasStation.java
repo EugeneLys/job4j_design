@@ -1,13 +1,18 @@
 package ru.job4j.algo.greedy;
 
 class GasStation {
+
     public int canCompleteCircuit(int[] gas, int[] cost) {
-        int result = -1;
-        int start = 0;
-        int totalGas = 0, totalCost = 0, tank = 0;
+        var result = -1;
+        int totalGas, totalCost, tank;
+        int count;
+        int start;
         for (int i = 0; i < gas.length; i++) {
             start = i;
-            int count = gas.length;
+            count = gas.length;
+            tank = 0;
+            totalGas = 0;
+            totalCost = 0;
             while (count > 0) {
                 totalGas += gas[start];
                 totalCost += cost[start];
@@ -18,14 +23,12 @@ class GasStation {
                 }
                 count--;
                 if (tank < 0) {
-                    tank = 0;
-                    totalGas = 0;
-                    totalCost = 0;
                     break;
                 }
             }
             if (totalGas != 0 && totalGas >= totalCost) {
                 result = i;
+                break;
             }
         }
         return result;
