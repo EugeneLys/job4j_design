@@ -38,12 +38,15 @@ public class SimpleQueue<T> implements Iterable<T> {
         return new Iterator<T>() {
             @Override
             public boolean hasNext() {
-                return sizeOut > 0;
+                return !(sizeIn == 0 && sizeOut == 0);
             }
 
             @Override
             public T next() {
-                return poll();
+                if(hasNext()) {
+                    return poll();
+                }
+                return null;
             }
         };
     }

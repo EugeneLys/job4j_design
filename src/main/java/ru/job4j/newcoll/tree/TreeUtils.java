@@ -2,6 +2,9 @@ package ru.job4j.newcoll.tree;
 
 import ru.job4j.collection.SimpleQueue;
 
+import java.util.Iterator;
+import java.util.List;
+
 public class TreeUtils<T> {
 
     /**
@@ -11,12 +14,22 @@ public class TreeUtils<T> {
      * @throws IllegalArgumentException если root является null
      */
     public int countNode(Node<T> root) {
+        if (root == null) {
+            throw new IllegalArgumentException();
+        }
         SimpleQueue<Node<T>> queue = new SimpleQueue<>();
-        int result = 0;
-        /*TODO реализуйте метод.*/
-        while (queue.iterator().hasNext()) {
-            queue.iterator().next();
-            result++;
+        int result = 1;
+        queue.push(root);
+        Node<T> node = queue.poll();
+        while (node != null) {
+            if (node.getChildren().isEmpty()) {
+                break;
+            }
+            for (Node<T> n : node.getChildren()) {
+                    queue.push(n);
+                    result++;
+            }
+            node = queue.poll();
         }
         return result;
     }
