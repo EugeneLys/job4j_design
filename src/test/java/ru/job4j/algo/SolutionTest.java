@@ -23,4 +23,13 @@ class SolutionTest {
         int result = solution.maxProfit(nums, fee);
         assertThat(6).isEqualTo(result);
     }
+
+    @Test
+    void whenCorrect3() {
+        Solution solution = new Solution();
+        int[] nums = new int[] {1,4,6,2,8,3,10,14};
+        int fee = 3;
+        int result = solution.maxProfit(nums, fee);
+        assertThat(13).isEqualTo(result);
+    }
 }

@@ -4,29 +4,23 @@ import java.util.*;
 
 class Solution {
     public int maxProfit(int[] prices, int fee) {
-        int total = 0;
-        int tempIndex;
-        int currIndex = 0;
-        int temp;
-        int tempProfit = 0;
-        int current = prices[0];
-        for (int i = 1; i < prices.length; i++) {
-            while (i < prices.length - 1 && prices[i] <= current + fee) {
-                i++;
+    int result = 0;
+    int temp;
+    int current = prices[0];
+    for (int i = 1; i < prices.length; i++) {
+        current = Math.min(current, prices[i]);
+        if (current < prices[i] - fee) {
+            temp = i;
+            while (temp < prices.length && prices[temp] > prices[temp - 1] - fee) {
+                if (prices[temp] >= prices[i] + fee) {
+                    i = temp;
+                }
+                temp++;
             }
-            temp = prices[i];
-            tempIndex = i;
-            while (tempIndex < prices.length - 1 && prices[tempIndex] - fee < temp) {
-                tempIndex++;
-            }
-            if (prices[tempIndex] - fee >= temp) {
-                temp = prices[tempIndex];
-            }
-            total += temp - current - fee;
-            if (i < prices.length - 1) {
-                current = prices[i + 1];
-            }
+            result += prices[i] - fee - current;
+            current = prices[i];
         }
-        return total;
+    }
+    return result;
     }
 }

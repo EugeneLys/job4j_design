@@ -1,9 +1,11 @@
 package ru.job4j.collection;
 
+import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.Stack;
+import java.util.Spliterator;
+import java.util.function.Consumer;
 
-public class SimpleQueue<T> {
+public class SimpleQueue<T> implements Iterable<T> {
     private final SimpleStack<T> in = new SimpleStack<>();
     private final SimpleStack<T> out = new SimpleStack<>();
     private int sizeIn;
@@ -28,5 +30,31 @@ public class SimpleQueue<T> {
     public void push(T value) {
         in.push(value);
         sizeIn++;
+    }
+
+    @Override
+    public Iterator<T> iterator() {
+
+        return new Iterator<T>() {
+            @Override
+            public boolean hasNext() {
+                return sizeOut > 0;
+            }
+
+            @Override
+            public T next() {
+                return poll();
+            }
+        };
+    }
+
+    @Override
+    public void forEach(Consumer<? super T> action) {
+        Iterable.super.forEach(action);
+    }
+
+    @Override
+    public Spliterator<T> spliterator() {
+        return Iterable.super.spliterator();
     }
 }
