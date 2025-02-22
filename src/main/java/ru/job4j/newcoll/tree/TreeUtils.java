@@ -4,6 +4,7 @@ import ru.job4j.collection.SimpleQueue;
 import ru.job4j.collection.SimpleStack;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 public class TreeUtils<T> {
@@ -74,8 +75,19 @@ public class TreeUtils<T> {
      * @throws IllegalArgumentException если root является null
      */
     public boolean add(Node<T> root, T parent, T child) {
-        /* TODO реализуйте метод */
-        return false;
+        if (root == null) {
+            throw new IllegalArgumentException();
+        }
+        boolean result = false;
+        Optional<Node<T>> node = findByKey(root, parent);
+        //Optional<Node<T>> check = findByKey(root, child);
+        if (node.isPresent() /*&& check.isEmpty()*/) {
+            List<Node<T>> children = node.get().getChildren();
+            children.add(new Node<>(child));
+            node.get().setChildren(children);
+            result = true;
+        }
+        return result;
     }
 
     /**
@@ -86,9 +98,33 @@ public class TreeUtils<T> {
      * @throws IllegalArgumentException если root является null
      */
     public Optional<Node<T>> findByKey(Node<T> root, T key) {
+        if (root == null) {
+            throw new IllegalArgumentException();
+        }
+        int count = countNode(root);
+        Node<T> result = null;
         SimpleStack<Node<T>> stack = new SimpleStack<>();
-        /* TODO реализуйте метод */
-        return null;
+        stack.push(root);
+        Node<T> node = stack.pop();
+        while (count > 0) {
+            count--;
+            if (node.getValue() == key) {
+                result = node;
+                break;
+            }
+            for (Node<T> n : node.getChildren()) {
+                if (n != null) {
+                    stack.push(n);
+                    count++;
+                }
+            }
+            if (count == 0) {
+                break;
+            }
+            count--;
+            node = stack.pop();
+        }
+        return result == null ? Optional.empty() : Optional.of(result);
     }
 
     /**
@@ -100,7 +136,7 @@ public class TreeUtils<T> {
      * @throws IllegalArgumentException если root является null
      */
     public Optional<Node<T>> divideByKey(Node<T> root, T key) {
-        /* TODO реализуйте метод */
-        return null;
+
+        return findByKey(root, key);
     }
 }
