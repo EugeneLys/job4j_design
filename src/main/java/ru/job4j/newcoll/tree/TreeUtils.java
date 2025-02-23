@@ -3,9 +3,7 @@ package ru.job4j.newcoll.tree;
 import ru.job4j.collection.SimpleQueue;
 import ru.job4j.collection.SimpleStack;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 public class TreeUtils<T> {
 
@@ -80,8 +78,7 @@ public class TreeUtils<T> {
         }
         boolean result = false;
         Optional<Node<T>> node = findByKey(root, parent);
-        //Optional<Node<T>> check = findByKey(root, child);
-        if (node.isPresent() /*&& check.isEmpty()*/) {
+        if (node.isPresent()) {
             List<Node<T>> children = node.get().getChildren();
             children.add(new Node<>(child));
             node.get().setChildren(children);
@@ -136,7 +133,17 @@ public class TreeUtils<T> {
      * @throws IllegalArgumentException если root является null
      */
     public Optional<Node<T>> divideByKey(Node<T> root, T key) {
-
-        return findByKey(root, key);
+        var dismissed = findByKey(root, key).get();
+        Node<T> found;
+        for (T t : findAll(root)) {
+            found = findByKey(root, t).get();
+            if (found.getChildren().contains(dismissed)) {
+                var list = found.getChildren();
+                list.remove(dismissed);
+                found.setChildren(list);
+                break;
+            }
+        }
+        return Optional.of(dismissed);
     }
 }
