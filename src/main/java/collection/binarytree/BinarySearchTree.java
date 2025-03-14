@@ -18,18 +18,17 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
     private boolean put(Node node, T key) {
-        //TODO реализуйте метод
+        Node left = null;
+        Node right = null;
+
         return false;
     }
 
     public boolean contains(T key) {
-        /*TODO реализуйте метод с использованием приватного метода
-        private Node find(Node node, T key)*/
         return find(root, key) != null;
     }
 
     private Node find(Node node, T key) {
-        /*TODO реализуйте метод*/
         Node result = null;
         while (node != null) {
             if (node.key.equals(key)) {
@@ -89,8 +88,10 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
     private Node minimum(Node node) {
-        //TODO реализуйте метод
-        return null;
+        while (node.left != null) {
+            node = node.left;
+        }
+        return node;
     }
 
     public T maximum() {
@@ -98,8 +99,10 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
     private Node maximum(Node node) {
-        //TODO реализуйте метод
-        return null;
+        while (node.right != null) {
+            node = node.right;
+        }
+        return node;
     }
 
     @Override
