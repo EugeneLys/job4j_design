@@ -18,10 +18,20 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
     private boolean put(Node node, T key) {
-        Node left = null;
-        Node right = null;
-
-        return false;
+        if (node.key.compareTo(key) > 0) {
+            if (node.left == null) {
+                node.left = new Node(key);
+            } else {
+                put(node.left, key);
+            }
+        } else {
+            if (node.right == null) {
+                node.right = new Node(key);
+            } else {
+                put(node.right, key);
+            }
+        }
+        return true;
     }
 
     public boolean contains(T key) {
@@ -34,11 +44,8 @@ public class BinarySearchTree<T extends Comparable<T>> {
             if (node.key.equals(key)) {
                 result = node;
                 break;
-            } else if (node.key.compareTo(key) > 0) {
-                node = node.left;
-            } else {
-                node = node.right;
             }
+            node = node.key.compareTo(key) > 0 ? node.left : node.right;
         }
         return result;
     }
@@ -64,23 +71,33 @@ public class BinarySearchTree<T extends Comparable<T>> {
     }
 
     public List<T> inPreOrder() {
-        //TODO реализуйте метод
-        return null;
+        List<T> result = new ArrayList<>();
+        Node node = root;
+        return inPreOrder(node, result);
     }
 
     private List<T> inPreOrder(Node localRoot, List<T> list) {
-        //TODO реализуйте метод
-        return null;
+        if (localRoot != null) {
+            list.add(localRoot.key);
+            inPreOrder(localRoot.left, list);
+            inPreOrder(localRoot.right, list);
+        }
+        return list;
     }
 
     public List<T> inPostOrder() {
-        //TODO реализуйте метод
-        return null;
+        List<T> result = new ArrayList<>();
+        Node node = root;
+        return inPostOrder(node, result);
     }
 
     private List<T> inPostOrder(Node localRoot, List<T> list) {
-        //TODO реализуйте метод
-        return null;
+        if (localRoot != null) {
+            inPostOrder(localRoot.left, list);
+            inPostOrder(localRoot.right, list);
+            list.add(localRoot.key);
+        }
+        return list;
     }
 
     public T minimum() {
