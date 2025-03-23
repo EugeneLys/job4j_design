@@ -1,5 +1,7 @@
 package collection.binarytree;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class AvlTree<T extends Comparable<T>> {
@@ -48,7 +50,7 @@ public class AvlTree<T extends Comparable<T>> {
 
     public boolean remove(T element) {
         boolean result = false;
-        if (Objects.nonNull(element) && Objects.nonNull(root) && contains(root, element)) {
+        if (Objects.nonNull(element) && Objects.nonNull(root) && contains(element)) {
             root = remove(root, element);
             result = true;
         }
@@ -121,43 +123,93 @@ public class AvlTree<T extends Comparable<T>> {
     }
 
     private Node leftRotation(Node node) {
-        //TODO реализуйте метод
-        return null;
+        Node newParent = node.right;
+        node.right = newParent.left;
+        newParent.left = node;
+        updateHeight(node);
+        updateHeight(newParent);
+        return newParent;
     }
 
     private Node rightRotation(Node node) {
-        //TODO реализуйте метод
-        return null;
+        Node newParent = node.left;
+        node.left = newParent.right;
+        newParent.right = node;
+        updateHeight(node);
+        updateHeight(newParent);
+        return newParent;
     }
 
     public T minimum() {
-        //TODO реализуйте метод
-        return null;
+        return minimum(root).key;
+    }
+
+    public Node minimum(Node node) {
+        while (node.left != null) {
+            node = node.left;
+        }
+        return node;
     }
 
     public T maximum() {
-        //TODO реализуйте метод
-        return null;
+        return maximum(root).key;
+    }
+
+    public Node maximum(Node node) {
+        while (node.right != null) {
+            node = node.right;
+        }
+        return node;
     }
 
     public List<T> inSymmetricalOrder() {
-        //TODO реализуйте метод
-        return null;
+        List<T> result = new ArrayList<>();
+        Node node = root;
+        return inSymmetricalOrder(node, result);
+    }
+
+    private List<T> inSymmetricalOrder(Node localRoot, List<T> list) {
+        if (localRoot != null) {
+            inSymmetricalOrder(localRoot.left, list);
+            list.add(localRoot.key);
+            inSymmetricalOrder(localRoot.right, list);
+        }
+        return list;
     }
 
     public List<T> inPreOrder() {
-        //TODO реализуйте метод
-        return null;
+        List<T> result = new ArrayList<>();
+        Node node = root;
+        return inPreOrder(node, result);
+    }
+
+    private List<T> inPreOrder(Node localRoot, List<T> list) {
+        if (localRoot != null) {
+            list.add(localRoot.key);
+            inPreOrder(localRoot.left, list);
+            inPreOrder(localRoot.right, list);
+        }
+        return list;
     }
 
     public List<T> inPostOrder() {
-        //TODO реализуйте метод
-        return null;
+        List<T> result = new ArrayList<>();
+        Node node = root;
+        return inPostOrder(node, result);
+    }
+
+    private List<T> inPostOrder(Node localRoot, List<T> list) {
+        if (localRoot != null) {
+            inPostOrder(localRoot.left, list);
+            inPostOrder(localRoot.right, list);
+            list.add(localRoot.key);
+        }
+        return list;
     }
 
     @Override
     public String toString() {
-        return TreePrinter.getTreeDisplay(root);
+        return PrintTree.getTreeDisplay(root);
     }
 
     private class Node implements VisualNode {
