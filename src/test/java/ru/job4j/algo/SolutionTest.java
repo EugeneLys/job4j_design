@@ -9,13 +9,14 @@ class SolutionTest {
     @Test
     void whenCorrect() {
         Solution solution = new Solution();
-        int[] nums = new int[] {1, 3, 2, 8, 4, 9};
-        int fee = 2;
-        int result = solution.maxProfit(nums, fee);
-        assertThat(8).isEqualTo(result);
+        char [][] chars = new char[][] {{'1', '1', '1', '1', '0'}, {'1', '1', '0', '1', '0'}, {'1', '1', '0', '0', '0'},
+                {'0', '0', '0', '0', '0'}};
+        int expected = 1;
+        int result = solution.numIslands(chars);
+        assertThat(expected).isEqualTo(result);
     }
 
-    @Test
+   /* @Test
     void whenCorrect2() {
         Solution solution = new Solution();
         int[] nums = new int[] {1, 3, 7, 5, 10, 3};
@@ -31,5 +32,5 @@ class SolutionTest {
         int fee = 3;
         int result = solution.maxProfit(nums, fee);
         assertThat(13).isEqualTo(result);
-    }
+    }*/
 }
