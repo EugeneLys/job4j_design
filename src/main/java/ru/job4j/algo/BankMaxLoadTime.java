@@ -1,0 +1,37 @@
+package ru.job4j.algo;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class BankMaxLoadTime {
+
+    public static int[] findMaxLoadTime(List visitTimes) {
+        int maxLoadStartTime = 0;
+        int maxLoadEndTime = 0;
+        return new int[]{maxLoadStartTime, maxLoadEndTime};
+    }
+
+     static class Event implements Comparable<Event> {
+        int time;
+        EventType type;
+
+        Event(int time, EventType type) {
+            this.time = time;
+            this.type = type;
+        }
+
+        @Override
+        public int compareTo(Event other) {
+            if (this.time == other.time) {
+                return this.type == EventType.ARRIVAL ? -1 : 1;
+            }
+            return Integer.compare(this.time, other.time);
+        }
+
+    }
+
+    enum EventType {
+        ARRIVAL, DEPARTURE
+    }
+}

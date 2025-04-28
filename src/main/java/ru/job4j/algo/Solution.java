@@ -4,28 +4,46 @@ import java.util.*;
 
 class Solution {
 
-    public int numIslands(char[][] grid) {
-        int result = 0;
-        int lenght1 = grid.length;
-        int length2 = grid[0].length;
-        for (int i = 0; i < lenght1; i++) {
-            for (int j = 0; j < length2; j++) {
-                if (grid[i][j] == '1') {
-                    result++;
-                    mark(grid, i , j);
+    public List<String> removeInvalidParentheses(String s) {
+        List<String> result = new ArrayList<>();
+        char[] array = s.toCharArray();
+        int delta = 1;
+        char[] temp = new char[array.length - 1];
+        if (check(array, '(', ')')) {
+            result.add(s);
+            return result;
+        }
+        while (result.isEmpty()) {
+            for (int i = 0; i < array.length; i++) {
+                System.arraycopy(array, 0, temp, 0, i);
+                System.arraycopy(array, i + delta, temp, i, array.length - delta - i);
+                if (check(temp, '(', ')')) {
+                    String str = new String(temp);
+                    if (!result.contains(str)) {
+                        result.add(str);
+                    }
                 }
             }
+            delta++;
         }
-        return result;
+        return result.isEmpty() ? List.of("") : result;
     }
-
-    private void mark(char[][] grid, int i, int j) {
-        if (i < 0 || j < 0 || i >= grid.length || j >= grid[0].length || grid[i][j] == '0')
-            return;
-        grid[i][j] = '0';
-        mark(grid, i, j+1);
-        mark(grid, i, j-1);
-        mark(grid, i+1, j);
-        mark(grid, i-1, j);
+        private boolean check(char[] chars, char left, char right) {
+            boolean b = false;
+            int count = 0;
+            for (int i = 0; i < chars.length; i++) {
+                if (chars[i] == left) {
+                    count++;
+                } else if (chars[i] == right){
+                    count--;
+                }
+                if (count < 0) {
+                    return false;
+                }
+            }
+            if (count == 0) {
+                b = true;
+            }
+        return  b;
     }
 }
