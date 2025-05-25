@@ -10,9 +10,13 @@ public class BankMaxLoadTime {
         }
 
         int start = ((int[]) visitTimes.get(0))[0];
+
         int end = ((int[]) visitTimes.get(0))[1];
+
         int maxLoadStartTime = start;
+
         int count = 0;
+
         int temp = 0;
         for (int i = 1; i < visitTimes.size(); i++) {
             while (((int[]) visitTimes.get(i))[0] <= end) {
