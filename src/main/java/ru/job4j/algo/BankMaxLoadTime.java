@@ -8,6 +8,7 @@ public class BankMaxLoadTime {
         if (visitTimes.isEmpty()) {
             return null;
         }
+
         int start = ((int[]) visitTimes.get(0))[0];
         int end = ((int[]) visitTimes.get(0))[1];
         int maxLoadStartTime = start;
