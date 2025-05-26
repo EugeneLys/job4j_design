@@ -22,6 +22,7 @@ public class Brackets {
                     result = false;
                 }
             }
+
             if (element.equals("]")) {
                 if (stack.isEmpty() || !stack.pop().equals("[")) {
                     result = false;
