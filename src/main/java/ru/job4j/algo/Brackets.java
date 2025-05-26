@@ -6,6 +6,7 @@ public class Brackets {
     public boolean isValid(String s) {
 
         var result = true;
+
         var elements = s.split("");
         var stack = new Stack<>();
         for (var element : elements) {
