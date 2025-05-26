@@ -11,6 +11,7 @@ public class Brackets {
             if (element.equals("{") || element.equals("[") || element.equals("(")) {
                 stack.push(element);
             }
+
             if (element.equals(")")) {
                 if (stack.isEmpty() || !stack.pop().equals("(")) {
                     result = false;
@@ -21,6 +22,7 @@ public class Brackets {
                     result = false;
                 }
             }
+
             if (element.equals("]")) {
                 if (stack.isEmpty() || !stack.pop().equals("[")) {
                     result = false;
