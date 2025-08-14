@@ -35,4 +35,40 @@ class LongestSubarrayTest {
         assertThat(result).isEqualTo(expected);
     }
 
+    @Test
+    void whenCorrect4() {
+        LongestSubarray longestSubarray = new LongestSubarray();
+        int[] array = new int[] {1, 1, 0, 0, 1, 1, 1, 0, 1};
+        int result = longestSubarray.longestSubarray(array);
+        int expected = 4;
+        assertThat(result).isEqualTo(expected);
+    }
+
+    @Test
+    void whenCorrect5() {
+        LongestSubarray longestSubarray = new LongestSubarray();
+        int[] array = new int[] {0, 0, 1, 1};
+        int result = longestSubarray.longestSubarray(array);
+        int expected = 2;
+        assertThat(result).isEqualTo(expected);
+    }
+
+    @Test
+    void whenCorrect6() {
+        LongestSubarray longestSubarray = new LongestSubarray();
+        int[] array = new int[] {1, 0, 1, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1};
+        int result = longestSubarray.longestSubarray(array);
+        int expected = 11;
+        assertThat(result).isEqualTo(expected);
+    }
+
+    @Test
+    void whenCorrect7() {
+        LongestSubarray longestSubarray = new LongestSubarray();
+        int[] array = new int[] {1, 1, 0, 0, 1, 0, 1, 0, 0, 1};
+        int result = longestSubarray.longestSubarray(array);
+        int expected = 2;
+        assertThat(result).isEqualTo(expected);
+    }
+
 }
